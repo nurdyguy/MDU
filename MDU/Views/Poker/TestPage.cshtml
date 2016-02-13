@@ -1,0 +1,133 @@
+﻿@Model Game
+@{
+    ViewBag.Title = "TestPage";
+}
+
+<h2>TestPage</h2>
+
+
+
+    @*<h2>High Score:  @Model.WinningScore</h2>
+    
+    <div>Hands:<br />
+        @foreach(var p in Model.Players)
+        {
+            <div>
+                @foreach(var c in p.Hand.Cards)
+                {
+                    <img src="../@c.Image" />
+                }                 
+            </div><br />            
+        }
+
+    </div>
+    
+    <div>Board:<br />
+        @foreach(var c in Model.Board)
+        {
+            <img src="../@c.Image" />
+        }
+    </div>
+
+    @for(int i = 0; i < ViewBag.PlayerWins.Count; i++)
+    {
+        <h3>Player @i Wins: @ViewBag.PlayerWins[i]</h3>    
+    }
+    @if (ViewBag.Chops != null)
+    {
+        <h3>Chops: @ViewBag.Chops</h3>
+    }
+    @if (ViewBag.Timers != null)
+    {
+        <h3>Timer: </h3><br />
+        for (int i = 0; i < ViewBag.Timers.Count; i++)
+        {
+            <h5>@ViewBag.Timers[i]</h5><br />
+        }
+    }*@
+
+    <button type="button" class="btn btn-primary" onclick="SetupStartHands()">Setup Start Hands</button>
+    <button type="button" class="btn btn-warning"onclick="BeginStatCalculator()">Begin Stat Calculator</button>
+
+<div id="runningOverlay" style="display:none; opacity:.4; width:100%; height:100%; background-color:grey; position:absolute; top:0; left:0;" background-image="loading.gif"></div>
+
+<script>
+    function SetupStartHands()
+    {
+        return;
+        $('#runningOverlay').show();
+        $.ajax(
+        {
+            url: '/poker/Setup_Start_Hands',
+            type: "POST",
+            async: true,
+            contentType: 'application/json; charset=utf-8',
+            success: function (retObj)
+            {
+                var str = new Date().toLocaleTimeString();
+                str += '\nTimers:  ';
+                for (var i in retObj)
+                    str += i + ', ';
+                str.substring(0, str.length - 2);
+                str += '\n----------------------';
+                alert(str);
+            },
+            error: function (retObj)
+            {
+                alert('error');
+            },
+            complete: function ()
+            {
+                //alert('done');
+                $('#runningOverlay').hide();
+            }
+        });
+
+    }
+
+    function BeginStatCalculator(num)
+    {
+        var data = { num: 50 };
+        $('#runningOverlay').show();
+        $.ajax(
+        {
+            url: '/poker/BeginStatCalculator',
+            type: "POST",
+            data: JSON.stringify(data),
+            async: true,
+            contentType: 'application/json; charset=utf-8',
+            success: function (retObj)
+            {
+                var str = new Date().toLocaleTimeString();
+                str += '\nTimers:  ';
+                for (var i in retObj)
+                    str += '\n' + retObj[i];
+                str.substring(0, str.length - 3);
+                str += '\n----------------------';
+                console.log(str);
+                $('#runningOverlay').hide();
+                BeginStatCalculator();
+            },
+            error: function (retObj)
+            {
+                console.log('error');
+                $('#runningOverlay').hide();
+                setTimeout(function ()
+                {
+                    BeginStatCalculator()
+                }, 300000);
+            },
+            complete: function ()
+            {
+                //alert('done');
+                //$('#runningOverlay').hide();
+            }
+        });
+
+    }
+
+
+
+</script>
+
+

@@ -1,0 +1,168 @@
+﻿body {
+}
+
+ol.round li
+{
+    height:30px;
+}
+
+
+div.navTab
+{
+    display:inline-block;
+    height:40px;
+    width:200px;
+    border-top-left-radius:50px;
+
+    background-color:#858585;
+    color:white;
+    padding-left:40px;
+    padding-top:10px;
+}
+
+div.navTab.active
+{
+    background-color:#777766;
+}
+
+
+img.card
+{
+    height: 49px;
+    width: 36px;
+}
+
+img.card.selected
+{
+    height: 60px;
+    width: 52px;
+}
+
+img.card.inUse
+{
+    
+}
+
+#divGameSim
+{
+    
+    min-height:500px;
+    
+    margin-left:0px;
+    margin-right:0px;
+
+    background-color:#777766;
+    border-bottom-left-radius:5px;
+    border-bottom-right-radius:5px;
+}
+
+#divGameBoard
+{
+    /*
+    display:inline-block;
+    position:absolute;
+    left:0px;
+        */
+    min-width: 675px;
+    min-height: 400px;  
+    margin-top:50px;
+    background-image: url('../../Images/table.jpg');
+    background-repeat: no-repeat;
+
+}
+
+#gameMessage
+{
+    display:none;
+    margin-top:-30px;
+    margin-left:10px;
+}
+
+#divGameStats
+{
+    display:inline-block;
+    position:relative;
+
+    min-width: 300px;
+
+}
+
+#tableHandTracker
+{
+
+}
+
+div.playerHand
+{
+
+    height:80px;
+    width:75px;
+}
+
+div.cardsDown
+{
+    /*
+    background-image: url('../../Images/card_back_sm2.png');
+    background-repeat: no-repeat;
+        */
+}
+
+.gameElem
+{
+    position: absolute;
+    z-index:500;
+}
+
+img.playerCard
+{
+    height: 49px;
+    width: 25px;
+}
+
+.winner
+{
+    border:5px solid blue;
+    width:88px !important;
+    height:94px !important;
+    padding:2px;
+}
+
+h6:hover
+{
+    border:1px solid red;
+}
+
+div.playerHand h6
+{
+    margin-top:0px;
+    margin-bottom:5px;
+}
+
+.modal-overlay
+{
+    display:inline;
+    position:absolute;
+    width:100%;
+    height:100%;
+    top:-30px;
+    left:0px;
+
+    background-color:black;
+    opacity:.5;
+    z-index:100;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
