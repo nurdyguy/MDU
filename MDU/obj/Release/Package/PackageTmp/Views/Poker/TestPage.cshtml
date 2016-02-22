@@ -64,10 +64,12 @@
             contentType: 'application/json; charset=utf-8',
             success: function (retObj)
             {
-                var str = 'Timers:  ';
+                var str = new Date().toLocaleTimeString();
+                str += '\nTimers:  ';
                 for (var i in retObj)
                     str += i + ', ';
                 str.substring(0, str.length - 2);
+                str += '\n----------------------';
                 alert(str);
             },
             error: function (retObj)
@@ -96,19 +98,27 @@
             contentType: 'application/json; charset=utf-8',
             success: function (retObj)
             {
-                var str = 'Timers:  ';
+                var str = new Date().toLocaleTimeString();
+                str += '\nTimers:  ';
                 for (var i in retObj)
                     str += '\n' + retObj[i];
                 str.substring(0, str.length - 3);
-                console.log(str);
+                str += '\n----------------------';
+                console.log(str); 
                 $('#runningOverlay').hide();
-                BeginStatCalculator();
+                setTimeout(function ()
+                {
+                    BeginStatCalculator()
+                }, 600000);
             },
             error: function (retObj)
             {
                 console.log('error');
                 $('#runningOverlay').hide();
-                BeginStatCalculator()
+                setTimeout(function ()
+                {
+                    BeginStatCalculator()
+                }, 300000);
             },
             complete: function ()
             {

@@ -23,7 +23,18 @@ namespace MDU.Models.Poker
             }
         }
 
-
+        public static List<HeadToHeadStat> UpdateHeadToHeadStatValues(long handId, long p0Wins, long p1Wins, long chops)
+        {
+            //string updateQuery = "UPDATE dbo.HeadToHeadStats SET Hand0Wins = @p0, Hand1Wins = @p1, Chops = @p2 WHERE Id = @p3";
+            using (var conn = OpenConnection())
+            {
+                const string query = "UPDATE dbo.HeadToHeadStats "
+                                        + " SET Hand0Wins = @p0Wins, Hand1Wins = @p1Wins, Chops = @chops "
+                                        + " output inserted.Id, inserted.Hand0Id, inserted.Hand1Id "
+                                        + " WHERE Id = @handId";
+                return conn.Query<HeadToHeadStat>(query, new { handId, p0Wins, p1Wins, chops }).ToList();
+            }
+        }
 
 
 

@@ -56,45 +56,30 @@ namespace MDU.Models.Poker
         public Game PlayRounds(int num = 1)
         {
             var watch = new Stopwatch();
-            string updateQuery = "UPDATE dbo.HeadToHeadStats SET Hand0Wins = @p0, Hand1Wins = @p1, Chops = @p2 WHERE Id = @p3";
+            
 
             watch.Start();
 
-            //var startingHands = PokerRepository.GetNextCalcBatch(50);
-
-            var startingHands = db.HeadToHeadStats
-                                    .Where(h => h.Chops == 0)
-                                    .Take(50)
-                                    .ToList();
-
-            startingHands.ForEach(sh =>
-            {
-                sh.Chops = 1;
-                db.Entry(sh).State = EntityState.Modified;
-            });
-            db.SaveChanges();
+            var startingHands = PokerRepository.GetNextCalcBatch(50);
 
             Timers.Add(watch.Elapsed.TotalSeconds);
             watch.Restart();
-            
-            //startingHands = startingHands.Where(sh => sh.Chops == 0).Take(50).ToList();
-            //startingHands = startingHands.Where(sh => sh.Hand0Id == 4551).ToList();        && sh.Hand0Id >= 4651
-            //startingHands = startingHands.Where(sh => sh.Id == 45514650).ToList();
-
+           
             //var startingHands = new List<HeadToHeadStat>()
             //{
             //    new HeadToHeadStat()
             //    {
-            //        Id = 71225,
-            //        Hand0Id = 7,
-            //        Hand1Id = 1225
+            //        Id = 1102040,
+            //        Hand0Id = 110,
+            //        Hand1Id = 2040
             //    }
             //};
+            //var chopCount = new List<int>() { 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 
             Parallel.ForEach(startingHands, new ParallelOptions() { MaxDegreeOfParallelism = 6 }, sh =>
             //startingHands.ForEach(sh =>
             {
-                MDUContext _db = new MDUContext();
+                //MDUContext _db = new MDUContext();
                 Hand h0 = new Hand(sh.Hand0Id);
                 Hand h1 = new Hand(sh.Hand1Id);
                 List<Hand> hands = null;
@@ -110,37 +95,44 @@ namespace MDU.Models.Poker
                     hands = new List<Hand>() { h0, h1 };
                 }
                 Deck d = new Deck();
-                //HandCalculator hc = new HandCalculator();
+                HandCalculator hc = new HandCalculator();
                 long h0w = 0;
                 long h1w = 0;
                 long chops = 0;
 
                 d.RemoveCards(h0.Cards);
                 d.RemoveCards(h1.Cards);
-                List<Card> currBoard = new List<Card>();
+                List<Card> currBoard = new List<Card>(5);
                 List<Card> nextBoard = new List<Card>(d.DealNextCards(5));
+                //List<Card> nextBoard = new List<Card>()
+                //{
+                //    Card.Club8, Card.Diamond8, Card.Club3, Card.Heart3, Card.Diamond14
+                //};
+                
                 while (nextBoard != null)
                 {
-                    HandCalculator hc = new HandCalculator();
-                     d.AddCardsBackToDeckInOrder(currBoard);
+                    d.AddCardsBackToDeckInOrder(currBoard);
                     currBoard = d.DealCards(nextBoard);
 
                     var result = hc.CalculateWinner(hands , currBoard);
-                    if (result.WinningPlayerNumbers.Count > 1)
-                        chops++;
+                    if (result.WinningPlayerNumbers.Count > 1)                    
+                        chops++;                    
                     else if (result.WinningPlayerNumbers[0] == 0)
                         h0w++;
                     else if (result.WinningPlayerNumbers[0] == 1)
                         h1w++;
                     nextBoard = iCalc.GetNextHand(nextBoard, d.Cards);
                 }
-                if (reverse)
-                    _db.Database.ExecuteSqlCommand(updateQuery, h1w, h0w, chops, sh.Id);
+
+                if(reverse)
+                    PokerRepository.UpdateHeadToHeadStatValues(sh.Id, h1w, h0w, chops);
                 else
-                    _db.Database.ExecuteSqlCommand(updateQuery, h0w, h1w, chops, sh.Id);
+                    PokerRepository.UpdateHeadToHeadStatValues(sh.Id, h0w, h1w, chops);
+                Debug.WriteLine("------------");
                 Debug.WriteLine("h0: " + h0w);
                 Debug.WriteLine("h1: " + h1w);
                 Debug.WriteLine("chops: " + chops);
+                Debug.WriteLine("------------");
             });
 
             Timers.Add(watch.Elapsed.TotalSeconds);
@@ -249,7 +241,19 @@ namespace MDU.Models.Poker
             return null;
         }
 
-
+        private void PrintRound(Hand h0, Hand h1, List<Card> board, RoundResult result)
+        {
+            Debug.WriteLine("----------------------------");
+            PrintCards(h0.Cards);
+            PrintCards(h1.Cards);
+            PrintCards(board);
+            Debug.WriteLine("Score: " + result.WinningScore);
+            string str = "";
+            for (var i = 0; i < result.WinningPlayerNumbers.Count; i++)
+                str += " Player " + result.WinningPlayerNumbers[i].ToString();
+            Debug.WriteLine(str);
+            Debug.WriteLine("----------------------------");
+        }
 
     }
     public class RoundResult
@@ -258,6 +262,8 @@ namespace MDU.Models.Poker
         public List<int> WinningPlayerNumbers { get; set; }
         public long WinningScore { get; set; }
     }
+
+
 
     
 }

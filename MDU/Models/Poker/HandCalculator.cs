@@ -8,24 +8,27 @@ namespace MDU.Models.Poker
     public class HandCalculator
     {
 
-        private class FoundHand { public int num {get; set;} public int pos {get; set;} }
+        private class CalcHand 
+        {
+            public List<Card> firstFlush { get; set; }
+            public List<Card> firstTrip { get; set; }
+            public List<Card> firstPair { get; set; }
+            public List<Card> cards { get; set; }
+            public long score { get; set; }
+        }
 
-        private List<Card> firstFlush { get; set; }
-        private List<Card> firstStraight { get; set; }
-        private FoundHand firstTrip { get; set; }
-        private FoundHand firstPair { get; set; }
 
         public RoundResult CalculateWinner(List<Hand> hands, List<Card> board)
         {
-            var winners = new List<int>();
-            var winnerNumbers = new List<int>();
-            
+            var winners = new List<int>(10);
+            var winnerNumbers = new List<int>(10);
+
             long highScore = 0;
             long handScore = 0;
 
             Hand hand;
 
-            for(int i = 0; i < hands.Count; i++)
+            for (int i = 0; i < hands.Count; i++)
             {
                 hand = new Hand(hands[i]);
                 hand.Cards.AddRange(board);
@@ -49,332 +52,324 @@ namespace MDU.Models.Poker
 
         public long CalculateHandScore(Hand hand, long highScore)
         {
-            firstFlush = null;
-            firstTrip = null;
-            long score = 0;
+            CalcHand cHand = new CalcHand()
+            {
+                cards = hand.Cards,
+                firstFlush = new List<Card>(),
+                firstTrip = new List<Card>(),
+                score = 0
+            };
+            cHand.cards = cHand.cards.OrderByDescending(c => c.Number).ToList();
+
             int checkTo = (int)(highScore / 10000000000);
-            Func<Hand, long>[] HandCheck = {CheckStrFlush, CheckFourKind, CheckFullHouse, 
+            Func<CalcHand, CalcHand>[] HandCheck = {CheckStrFlush, CheckFourKind, CheckFullHouse, 
                                             CheckFlush, CheckStr, CheckThreeKind,
                                             CheckTwoPair, CheckPair, CheckHighCard  };
-            hand.Cards = hand.Cards.OrderByDescending(c => c.Number).ToList();
-
-            for (int i = 0; i < HandCheck.Length && HandCheck.Length - i > checkTo && score == 0; i++)
+            
+            for (int i = 0; cHand.score == 0 && HandCheck.Length - i > checkTo && i < HandCheck.Length; i++)
             {
-                score = HandCheck[i](hand);
+                cHand = HandCheck[i](cHand);
             }
 
-            return score;
+            return cHand.score;
         }
 
-        private long CheckStrFlush(Hand hand)
+        private CalcHand CheckStrFlush(CalcHand cHand)
         {
-            long score = 0;
-            //List<Card> flush;
-            FoundHand str;
-            firstFlush = FindFlush(hand);
-            if (firstFlush != null)
+            cHand.firstFlush = FindFlush(cHand.cards);
+            if (cHand.firstFlush.Count > 0)
             {
-                str = FindFirstStr(new Hand() { Cards = firstFlush });
-                if (str.num > 0)
+                var str = FindFirstStr(cHand.firstFlush);
+                if (str.Count > 0)
                 {
-                    score = 80000000000;
-                    score += str.num * 100000000;
+                    cHand.score = 80000000000;
+                    cHand.score += str[0].Number * 100000000;
                 }
             }
-            return score;
+            return cHand;
         }
 
-        private long CheckFourKind(Hand hand)
+        private CalcHand CheckFourKind(CalcHand cHand)
         {
-            long score = 0;
-            FoundHand quad;
-            var CardsLeft = 1;
-            var tmpHand = new Hand() { Cards = hand.Cards };
+            var cardsLeft = 1;
+            var tmpHand = new List<Card>(cHand.cards);
 
-            quad = FindFirstQuad(tmpHand);
-            if (quad.num > 0)
+            List<Card> quad = FindFirstQuad(tmpHand);
+            if (quad.Count > 0)
             {
-                score = 70000000000;
-                score += quad.num * 100000000;
-                tmpHand.Cards = tmpHand.Cards.Where(c => c.Number != quad.num).ToList();
-                score += ScoreHighCards(tmpHand, CardsLeft);
+                cHand.score = 70000000000;
+                cHand.score += quad[0].Number * 100000000;
+                //tmpHand = tmpHand.Where(c => c.Number != quad[0].Number).ToList();
+                tmpHand.RemoveAll(c => c.Number == quad[0].Number);
+                cHand.score += ScoreHighCards(tmpHand, cardsLeft);
             }
-            return score;
+            return cHand;
         }
 
-        // fix for double trips
-        private long CheckFullHouse(Hand hand)
+        private CalcHand CheckFullHouse(CalcHand cHand)
         {
             long score = 0;
-            FoundHand pair;
-            var tmpHand = new Hand() { Cards = hand.Cards };
+            List<Card> pair;
+            var tmpHand = new List<Card>(cHand.cards);
 
-            firstTrip = FindFirstTrip(tmpHand);
-            if (firstTrip.num > 0)
+            cHand.firstTrip = FindFirstTrip(tmpHand);
+            if (cHand.firstTrip.Count > 0)
             {
-                tmpHand.Cards = tmpHand.Cards.Where(c => c.Number != firstTrip.num).ToList();
+                //tmpHand = tmpHand.Where(c => c.Number != cHand.firstTrip[0].Number).ToList();
+                tmpHand.RemoveAll(c => c.Number == cHand.firstTrip[0].Number);
                 pair = FindFirstPair(tmpHand);
-                if (pair.num > 0)
-                {           
-                    score = 60000000000;
-                    score += firstTrip.num * 100000000;
-                    score += pair.num * 1000000;
-                }
-            }
-            return score;
-        }
-
-        private long CheckFlush(Hand hand)
-        {
-            if (firstFlush == null)
-                return 0;
-            long score = 0;
-            //List<Card> flush;
-            //flush = FindFlush(hand);
-            //if (firstFlush.Count >= 5)
-            {
-                score = 50000000000;
-                score += ScoreHighCards(new Hand() { Cards = firstFlush }, 5);
-            }
-            return score;
-        }
-
-        private long CheckStr(Hand hand)
-        {
-            long score = 0;
-            FoundHand str;
-            str = FindFirstStr(hand);
-            if (str.num > 0)
-            {
-                score = 40000000000;
-                score += str.num * 100000000;
-            }
-            
-            return score;
-        }
-
-        private long CheckThreeKind(Hand hand)
-        {
-            if (firstTrip.num == 0)
-                return 0;
-            long score = 0;
-            //FoundHand trip;
-            var CardsLeft = 2;
-            var tmpHand = new Hand() { Cards = hand.Cards };
-            
-            //trip = FindFirstTrip(tmpHand);
-            //if (firstTrip.num > 0)
-            {
-                score = 30000000000;
-                score += firstTrip.num * 100000000;
-                tmpHand.Cards = tmpHand.Cards.Where(c => c.Number != firstTrip.num).ToList();
-                score += ScoreHighCards(tmpHand, CardsLeft);
-            }
-            return score;
-        }
-
-        private long CheckTwoPair(Hand hand)
-        {
-            long score = 0;
-            FoundHand pair1, pair2;
-            var CardsLeft = 1;
-            var tmpHand = new Hand() { Cards = hand.Cards };
-
-            pair1 = FindFirstPair(tmpHand);
-            if (pair1.num > 0)
-            {
-                tmpHand.Cards = tmpHand.Cards.Where(c => c.Number != pair1.num).ToList();
-                pair2 = FindFirstPair(tmpHand);
-                if (pair2.num > 0)
+                if (pair.Count > 0)
                 {
-                    score = 20000000000;
-                    score += pair1.num * 100000000;
-                    score += pair2.num * 1000000;
-                    tmpHand.Cards = tmpHand.Cards.Where(c => c.Number != pair2.num).ToList();
-                    score += ScoreHighCards(tmpHand, CardsLeft);
+                    cHand.score = 60000000000;
+                    cHand.score += cHand.firstTrip[0].Number * 100000000;
+                    cHand.score += pair[0].Number * 1000000;
                 }
             }
-            return score;
+            return cHand;
         }
 
-        private long CheckPair(Hand hand)
+        private CalcHand CheckFlush(CalcHand cHand)
         {
-            long score = 0;
-            FoundHand pair;
-            int CardsLeft = 3;
-            var tmpHand = new Hand() { Cards = hand.Cards };
+            if (cHand.firstFlush.Count == 0)
+                return cHand;
+            
+            cHand.score = 50000000000;
+            cHand.score += ScoreHighCards(cHand.firstFlush, 5);
+            
+            return cHand;
+        }
 
-            pair = FindFirstPair(tmpHand);
-            if (pair.num > 0)
+        private CalcHand CheckStr(CalcHand cHand)
+        {
+            var tmpHand = new List<Card>(cHand.cards);
+            tmpHand = FindFirstStr(tmpHand);
+            if (tmpHand.Count > 0)
             {
-                score = 10000000000;
-                score += pair.num * 100000000;
-                tmpHand.Cards = tmpHand.Cards.Where(c => c.Number != pair.num).ToList();
-                score += ScoreHighCards(tmpHand, CardsLeft);
+                cHand.score = 40000000000;
+                cHand.score += tmpHand[0].Number * 100000000;
             }
-            return score;
+
+            return cHand;
         }
 
-        private long CheckHighCard(Hand hand)
+        private CalcHand CheckThreeKind(CalcHand cHand)
         {
-            long score = 0;
-            score = ScoreHighCards(hand, 5);
-            return score;
+            if (cHand.firstTrip.Count == 0)
+                return cHand;
+
+            var cardsLeft = 2;
+            var tmpHand = new List<Card>(cHand.cards.Where(c => c.Number != cHand.firstTrip[0].Number)){};
+
+            cHand.score = 30000000000;
+            cHand.score += cHand.firstTrip[0].Number * 100000000;
+            cHand.score += ScoreHighCards(tmpHand, 2);
+
+            return cHand;
+        }
+
+        private CalcHand CheckTwoPair(CalcHand cHand)
+        {
+            var tmpHand = new List<Card>(cHand.cards){};
+            List<Card> pair1 = FindFirstPair(tmpHand);
+            cHand.firstPair = new List<Card>(pair1);
+            if (pair1.Count > 0)
+            {
+                //tmpHand = tmpHand.Where(c => c.Number != pair1[0].Number).ToList();
+                tmpHand.RemoveAll(c => c.Number == pair1[0].Number);
+                List<Card> pair2 = FindFirstPair(tmpHand);
+                if (pair2.Count > 0)
+                {
+                    cHand.score = 20000000000;
+                    cHand.score += pair1[0].Number * 100000000;
+                    cHand.score += pair2[0].Number * 1000000;
+                    //tmpHand = tmpHand.Where(c => c.Number != pair2[0].Number).ToList();
+                    tmpHand.RemoveAll(c => c.Number == pair2[0].Number);
+                    cHand.score += tmpHand[0].Number;
+                }
+            }
+            return cHand;
+        }
+
+        private CalcHand CheckPair(CalcHand cHand)
+        {
+            if (cHand.firstPair.Count == 0)
+                return cHand;
+            int cardsLeft = 3;
+            var tmpHand = new List<Card>(cHand.cards);
+
+            List<Card> pair = FindFirstPair(tmpHand);
+            if (pair.Count > 0)
+            {
+                cHand.score = 10000000000;
+                cHand.score += pair[0].Number * 100000000;
+                //tmpHand = tmpHand.Where(c => c.Number != pair[0].Number).ToList();
+                tmpHand.RemoveAll(c => c.Number == pair[0].Number);
+                cHand.score += ScoreHighCards(tmpHand, cardsLeft);
+            }
+            return cHand;
+        }
+
+        private CalcHand CheckHighCard(CalcHand cHand)
+        {
+            cHand.score = ScoreHighCards(cHand.cards, 5);
+            return cHand;
         }
 
         //// assumes no more pair/trips left --- hand may be only partial
-        private long ScoreHighCards(Hand hand, int numCards = 5)
+        private long ScoreHighCards(List<Card> cards, int numCards = 5)
         {
             long score = 0;
-            int CardsLeft = numCards;
-            for (var i = 0; i < hand.Cards.Count && CardsLeft > 0; i++)
+            int cardsLeft = numCards;
+            for (var i = 0; i < cards.Count && cardsLeft > 0; i++)
             {
-                score += hand.Cards[i].Number * (long)Math.Pow(100, CardsLeft - 1);
-                CardsLeft--;
+                score += cards[i].Number * (long)Math.Pow(100, cardsLeft - 1);
+                cardsLeft--;
             }
             return score;
         }
 
 
-        private FoundHand FindFirstPair(Hand hand)
+        private List<Card> FindFirstPair(List<Card> cards)
         {
-            for (var i = 0; i < hand.Cards.Count - 1; i++)
-                if (hand.Cards[i].Number == hand.Cards[i+1].Number)
+            for (var i = 0; i < cards.Count - 1; i++)
+                if (cards[i].Number == cards[i + 1].Number)
                 {
-                    return new FoundHand(){num =  hand.Cards[i].Number, pos = i };
+                    return new List<Card>(){cards[i], cards[i+1]};
                 }
-            return new FoundHand() { num = 0, pos = 0 };
+            return new List<Card>(0);
         }
 
 
-        private FoundHand FindFirstTrip(Hand hand)
+        private List<Card> FindFirstTrip(List<Card> cards)
         {
-            for (var i = 0; i < hand.Cards.Count - 2; i++)
-                if (hand.Cards[i].Number == hand.Cards[i + 1].Number && hand.Cards[i].Number == hand.Cards[i + 2].Number)
+            for (var i = 0; i < cards.Count - 2; i++)
+                if (cards[i].Number == cards[i + 1].Number && cards[i].Number == cards[i + 2].Number)
                 {
-                    firstTrip = new FoundHand() { num = hand.Cards[i].Number, pos = i };
-                    return firstTrip;
+                    return new List<Card>() {cards[i], cards[i+1], cards[i+2]};
                 }
-            return new FoundHand() { num = 0, pos = 0 };
+            return new List<Card>(0);
         }
 
 
-        private FoundHand FindFirstStr(Hand hand)
-        {
-            var inARow = 0;
+        private List<Card> FindFirstStr(List<Card> cards)
+        {   
             var failed = false;
             var passed = false;
             var start = 0;
             var i = start;
-            while (start + 4 < hand.Cards.Count && !passed)
+            var firstStr = new List<Card>(10);
+            while (start + 4 < cards.Count && !passed)
             {
                 i = start;
                 failed = false;
-                inARow = 0;
-                while (i + 1 < hand.Cards.Count && !failed && inARow < 4)
+                firstStr.Add(cards[start]);
+                while (i + 1 < cards.Count && !failed && firstStr.Count < 5)
                 {
-                    switch (hand.Cards[i].Number - hand.Cards[i + 1].Number)
+                    switch (cards[i].Number - cards[i + 1].Number)
                     {
                         case 0:
                             i++;
                             break;
                         case 1:
-                            inARow++;
+                            firstStr.Add(cards[i+1]);
                             i++;
                             break;
                         default:
                             failed = true;
                             start = i + 1;
+                            firstStr.Clear();
                             break;
                     }
                 }
-                if (inARow == 4)
-                {
-                    passed = true;
-                }
+                if (firstStr.Count == 5)
+                    passed = true;                
                 else
-                {
                     start = i + 1;
-                }
+                
             }
             if (passed)
-            {
-                return new FoundHand(){ num = hand.Cards[start].Number, pos = start };
-            }
+                return firstStr;
+
             // if not a normal straight, check for wheel
-            return this.FindWheel(hand);
+            return this.FindWheel(cards);
         }
 
 
-        private FoundHand FindWheel(Hand hand)
+        private List<Card> FindWheel(List<Card> cards)
         {
             bool found = false;
-            int pos = 0;
+            var firstStr = new List<Card>(10);
             // first card has to be Ace and last card a 2
-            if (hand.Cards[0].Number == 14 && hand.Cards[hand.Cards.Count - 1].Number == 2)
+            if (cards[0].Number == 14 && cards[cards.Count - 1].Number == 2)
             {
                 // look for 5 -- cant be in first or last 3 spots
-                for (var i = 1; i < hand.Cards.Count - 3 && !found; i++)
-                    if (hand.Cards[i].Number == 5)
+                for (var i = 1; i < cards.Count - 3 && !found; i++)
+                    if (cards[i].Number == 5)
                     {
                         found = true;
-                        pos = i;
+                        firstStr.Add(cards[i]);
                     }
-                if(!found)
-                    return new FoundHand() { num = 0, pos = 0 };               
+                if (!found)
+                    return new List<Card>(0);
                 // look for 4 -- cant be in first 2 or last 2 spots
                 found = false;
-                for (var i = 2; i < hand.Cards.Count - 2 && !found; i++)
-                    if (hand.Cards[i].Number == 4)
+                for (var i = 2; i < cards.Count - 2 && !found; i++)
+                    if (cards[i].Number == 4)
+                    {
                         found = true;
-                if(!found)
-                    return new FoundHand() { num = 0, pos = 0 };
+                        firstStr.Add(cards[i]);
+                    }
+                if (!found)
+                    return new List<Card>(0);
                 // look for 3 -- cant be in first 3 or last 1 spots
                 found = false;
-                for (var i = 3; i < hand.Cards.Count - 1 && !found; i++)
-                    if (hand.Cards[i].Number == 3)
+                for (var i = 3; i < cards.Count - 1 && !found; i++)
+                    if (cards[i].Number == 3)
+                    {
                         found = true;
-                if(!found)
-                    return new FoundHand() { num = 0, pos = 0 };
-                //got to here so passed
-                return new FoundHand() { num = 5, pos = pos };
+                        firstStr.Add(cards[i]);
+                    }
+                if (!found)
+                    return new List<Card>(0);
+                // know it contains a 2 so add last card
+                firstStr.Add(cards[cards.Count - 1]);
+   
+                return firstStr;
             }
-            return new FoundHand() { num = 0, pos = 0 };
-            
+            return new List<Card>(0);
+
         }
 
 
-        private List<Card> FindFlush(Hand hand)
+        private List<Card> FindFlush(List<Card> cards)
         {
-            //List<Card> suited; 
-            //foreach (var s in Suit.Suits)
-            //{
-            //    suited = hand.Cards.Where(c => c.Suit.Id == s.Id).ToList();
-            //    if (suited.Count >= 5)
-            //        return suited;
-            //}
-            var suits = new List<List<Card>>();
-            for(int i = 0; i < 4; i++)
-                suits.Add(new List<Card>());
-            hand.Cards.ForEach(c =>
+            var suits = new List<List<Card>>(4);
+            for (int i = 0; i < 4; i++)
+                suits.Add(new List<Card>(10));
+            cards.ForEach(c =>
             {
                 suits[c.Suit.Id].Add(c);
             });
-            
-            return suits.Where(s => s.Count > 4).SingleOrDefault();
+
+            var flush = suits.Where(s => s.Count > 4).SingleOrDefault();
+            if (flush == null)
+                return new List<Card>(0);
+            else
+                return flush;
         }
 
 
-        private FoundHand FindFirstQuad(Hand hand)
+        private List<Card> FindFirstQuad(List<Card> cards)
         {
-            for (var i = 0; i < hand.Cards.Count - 3; i++)
-                if (hand.Cards[i].Number == hand.Cards[i + 1].Number
-                    && hand.Cards[i].Number == hand.Cards[i + 2].Number
-                    && hand.Cards[i].Number == hand.Cards[i + 3].Number)
+            var quads = new List<Card>(4);
+            for (var i = 0; i < cards.Count - 3; i++)
+                if (cards[i].Number == cards[i + 1].Number
+                    && cards[i].Number == cards[i + 2].Number
+                    && cards[i].Number == cards[i + 3].Number)
                 {
-                    return new FoundHand() { num = hand.Cards[i].Number, pos = i };
+                    quads = new List<Card>() {cards[i], cards[i+1], cards[i+2], cards[i+3]};
                 }
-            return new FoundHand() { num = 0, pos = 0 };
+            return quads;
         }
 
     }

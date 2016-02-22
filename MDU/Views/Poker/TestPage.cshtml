@@ -104,9 +104,12 @@
                     str += '\n' + retObj[i];
                 str.substring(0, str.length - 3);
                 str += '\n----------------------';
-                console.log(str);
+                console.log(str); 
                 $('#runningOverlay').hide();
-                BeginStatCalculator();
+                setTimeout(function ()
+                {
+                    BeginStatCalculator()
+                }, 600000);
             },
             error: function (retObj)
             {

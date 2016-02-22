@@ -79,4 +79,3 @@ C:\Users\Your Face\Documents\Github\MDU\MDU\bin\zh-Hans\System.Spatial.resources
 C:\Users\Your Face\Documents\Github\MDU\MDU\bin\zh-Hant\System.Spatial.resources.dll
 C:\Users\Your Face\Documents\Github\MDU\MDU\obj\Debug\MDU.dll
 C:\Users\Your Face\Documents\Github\MDU\MDU\obj\Debug\MDU.pdb
-C:\Users\Your Face\Documents\Github\MDU\MDU\obj\Debug\MDU.csprojResolveAssemblyReference.cache
