@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Runtime.InteropServices;
 
 namespace MDU.Models.Poker
 {
@@ -46,6 +47,36 @@ namespace MDU.Models.Poker
                     winnerNumbers = new List<int>() { i };
                 }
             }
+
+            return new RoundResult() { WinningScore = highScore, WinningPlayerNumbers = winnerNumbers };
+        }
+
+        //private static string path = System.Web.Hosting.HostingEnvironment.MapPath("/bin/HandCalculatorDll.dll");
+        //[DllImport("C:\\Users\\Your Face\\Documents\\Github\\HandCalculatorDll\\Debug\\HandCalculatorDll.dll", CallingConvention = CallingConvention.Cdecl)]
+        
+        [DllImport("HandCalculatorDll.dll", CallingConvention = CallingConvention.Cdecl)]
+        //[DllImport("C:\\HostingSpaces\\kayqvolg\\mathdorksunite.com\\wwwroot\\bin\\_bin_deployableAssemblies\\HandCalculatorDll.dll", CallingConvention = CallingConvention.Cdecl)]
+        public static extern bool CalculateWinner(int[] req);
+        public RoundResult CalculateWinnerDll(List<Hand> hands, List<Card> board)
+        {
+            //PInvoke.SetDllDirectory(
+            RoundResult result = new RoundResult();
+
+            var reqArr = new int[25];
+            for (int i = 0; i < hands.Count; i++)
+                for (int j = 0; j < hands[i].Cards.Count; j++)
+                    reqArr[2 * i + j] = hands[i].Cards[j].Id;
+            for (int i = hands.Count * 2; i < 20; i++)
+                reqArr[i] = -1;
+            for (int i = 0; i < board.Count; i++)
+                reqArr[20 + i] = board[i].Id;
+
+            var success = CalculateWinner(reqArr);
+
+            long highScore = (long)reqArr[23] * 10000 + reqArr[24];
+            var winnerNumbers = new List<int>(10);
+            for(int i = 0; reqArr[i] != -1 && i < 10; i++)
+                winnerNumbers.Add(reqArr[i]);
 
             return new RoundResult() { WinningScore = highScore, WinningPlayerNumbers = winnerNumbers };
         }
@@ -371,6 +402,15 @@ namespace MDU.Models.Poker
                 }
             return quads;
         }
+
+
+
+
+
+
+
+        
+
 
     }
 }

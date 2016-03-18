@@ -6,7 +6,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <TimeStampOfAssociatedLegacyPublishXmlFile />
-    <EncryptedPassword>AQAAANCMnd8BFdERjHoAwE/Cl+sBAAAAMIDJZb4Cg0+EbDSVrVxfdAAAAAACAAAAAAAQZgAAAAEAACAAAACHyYa3BPkwggcpWKj1l/KQFpzof8Ejf8ebdXrZhIB4lgAAAAAOgAAAAAIAACAAAADgkQytYnPfxrzsFyufbWYJaLC5BSOZfYFVNcxfxpLfsSAAAADTD6TllxVgLjFUf/e2Karz1m7CbEeN2xR1NkVhp5ns4EAAAACUsNycwYkXoDaqTLDMjbV2opk/9t4qh3GSJ5wrQLVWr5t336f5NMeGMmwCuHMFczgO1/HK2AOptcnctPPYXbeV</EncryptedPassword>
+    <EncryptedPassword>AQAAANCMnd8BFdERjHoAwE/Cl+sBAAAAMIDJZb4Cg0+EbDSVrVxfdAAAAAACAAAAAAAQZgAAAAEAACAAAACvEkDjzx6Q27cgM4zik/f3iXgYEwLceFekpq4ldTerTAAAAAAOgAAAAAIAACAAAAAfhVADlGQq/GE/Blar3zUZ/fERleBSVCbxJXzE9K8UciAAAAAbmTvqe64mxBbDuVkCLY/logNMvmemQEzeEYFQmURUuEAAAAB7nFttrl3s40wJ5NU2BoLhyb/NJLo5nBLLIQ60fQUNLPW1WnzbZzBmYjOh+nuQ3oUv0dr+XMqQM1pLvwfyPcST</EncryptedPassword>
   </PropertyGroup>
   <ItemGroup>
     <File Include="bin/Antlr3.Runtime.dll">
@@ -63,6 +63,9 @@ by editing this MSBuild file. In order to learn more about this please visit htt
     <File Include="bin/fr/System.Spatial.resources.dll">
       <publishTime>02/08/2016 07:57:33</publishTime>
     </File>
+    <File Include="bin/HandCalculatorDll.dll">
+      <publishTime>03/15/2016 20:47:01</publishTime>
+    </File>
     <File Include="bin/it/Microsoft.Data.Edm.resources.dll">
       <publishTime>02/08/2016 07:57:34</publishTime>
     </File>
@@ -91,7 +94,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>02/08/2016 07:57:33</publishTime>
     </File>
     <File Include="bin/MDU.dll">
-      <publishTime>02/21/2016 13:43:32</publishTime>
+      <publishTime>03/17/2016 22:59:58</publishTime>
     </File>
     <File Include="bin/Microsoft.Data.Edm.dll">
       <publishTime>02/08/2016 07:57:34</publishTime>
@@ -173,6 +176,9 @@ by editing this MSBuild file. In order to learn more about this please visit htt
     </File>
     <File Include="bin/zh-Hant/System.Spatial.resources.dll">
       <publishTime>02/08/2016 07:57:33</publishTime>
+    </File>
+    <File Include="bin/_bin_deployableAssemblies/HandCalculatorDll.dll">
+      <publishTime>03/17/2016 22:55:47</publishTime>
     </File>
     <File Include="Content/bootstrap-theme.css">
       <publishTime>07/31/2015 14:31:58</publishTime>
@@ -493,7 +499,10 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>07/31/2015 14:31:58</publishTime>
     </File>
     <File Include="Scripts/mdu/Probability.js">
-      <publishTime>07/31/2015 14:31:58</publishTime>
+      <publishTime>02/28/2016 14:22:40</publishTime>
+    </File>
+    <File Include="Scripts/mdu/Simulator.js">
+      <publishTime>02/28/2016 14:10:39</publishTime>
     </File>
     <File Include="Scripts/modernizr-2.6.2.js">
       <publishTime>02/08/2016 07:57:29</publishTime>
@@ -562,10 +571,16 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>01/11/2016 18:37:38</publishTime>
     </File>
     <File Include="Views/Poker/Probability.cshtml">
-      <publishTime>07/31/2015 14:31:58</publishTime>
+      <publishTime>02/28/2016 14:23:05</publishTime>
+    </File>
+    <File Include="Views/Poker/rundlltest3.cshtml">
+      <publishTime>03/16/2016 18:49:29</publishTime>
+    </File>
+    <File Include="Views/Poker/Simulator.cshtml">
+      <publishTime>02/28/2016 14:11:14</publishTime>
     </File>
     <File Include="Views/Poker/TestPage.cshtml">
-      <publishTime>02/21/2016 18:38:56</publishTime>
+      <publishTime>03/16/2016 18:48:47</publishTime>
     </File>
     <File Include="Views/Shared/Error.cshtml">
       <publishTime>07/31/2015 14:31:58</publishTime>
@@ -583,7 +598,10 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>02/08/2016 07:57:24</publishTime>
     </File>
     <File Include="Web.config">
-      <publishTime>02/21/2016 13:10:57</publishTime>
+      <publishTime>03/14/2016 21:01:40</publishTime>
+    </File>
+    <File Include="_bin_deployableAssemblies/HandCalculatorDll.dll">
+      <publishTime>03/17/2016 22:55:47</publishTime>
     </File>
   </ItemGroup>
 </Project>

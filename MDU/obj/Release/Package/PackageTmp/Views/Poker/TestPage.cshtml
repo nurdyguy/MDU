@@ -48,6 +48,7 @@
 
     <button type="button" class="btn btn-primary" onclick="SetupStartHands()">Setup Start Hands</button>
     <button type="button" class="btn btn-warning"onclick="BeginStatCalculator()">Begin Stat Calculator</button>
+    <button type="button" class="btn btn-success"onclick="RunDllTest()">Test dll</button>
 
 <div id="runningOverlay" style="display:none; opacity:.4; width:100%; height:100%; background-color:grey; position:absolute; top:0; left:0;" background-image="loading.gif"></div>
 
@@ -109,7 +110,7 @@
                 setTimeout(function ()
                 {
                     BeginStatCalculator()
-                }, 600000);
+                }, 0);
             },
             error: function (retObj)
             {
@@ -124,6 +125,45 @@
             {
                 //alert('done');
                 //$('#runningOverlay').hide();
+            }
+        });
+
+    }
+
+    function RunDllTest()
+    {
+        var data = { num: 50 };
+        $('#runningOverlay').show();
+        $.ajax(
+        {
+            url: '/poker/BeginStatCalculator',
+            type: "POST",
+            data: JSON.stringify(data),
+            async: true,
+            contentType: 'application/json; charset=utf-8',
+            success: function (retObj)
+            {
+                var str = new Date().toLocaleTimeString();
+                str += '\nTimers:  ';
+                for (var i in retObj)
+                    str += '\n' + retObj[i];
+                str.substring(0, str.length - 3);
+                str += '\n----------------------';
+                console.log(str);
+                $('#runningOverlay').hide();
+                setTimeout(function ()
+                {
+                    //BeginStatCalculator()
+                }, 0);
+            },
+            error: function (retObj)
+            {
+                $('#runningOverlay').hide();
+            },
+            complete: function ()
+            {
+                //alert('done');
+                $('#runningOverlay').hide();
             }
         });
 

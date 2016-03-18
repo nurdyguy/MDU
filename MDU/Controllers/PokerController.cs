@@ -9,6 +9,8 @@ using MDU.Models;
 using MDU.Models.Poker;
 using MDU.Context;
 
+using System.Runtime.InteropServices;
+
 
 namespace MDU.Controllers
 {
@@ -33,6 +35,12 @@ namespace MDU.Controllers
         }
 
         public ActionResult Probability()
+        {
+            //var pokers = db.Pokers.Include(p => p.game);
+            return View();
+        }
+
+        public ActionResult Simulator()
         {
             //var pokers = db.Pokers.Include(p => p.game);
             return View();
@@ -72,6 +80,7 @@ namespace MDU.Controllers
         [HttpPost]
         public JsonResult SetupStartHands()
         {
+            return null;
             var db = new MDUContext();
             var h2h = new HeadToHeadStat();
             //if (db.HeadToHeadStats.ToList().Count() == 812175)
@@ -98,6 +107,37 @@ namespace MDU.Controllers
 
         public ActionResult TestPage()
         {
+            return View();
+        }
+
+        [HttpPost]
+        public JsonResult RunDllTest()
+        {
+            var dllTest = new DllTester();
+            //dllTest.RunTest();
+            var response = Json("");
+            return response;
+        }
+
+        [HttpPost]
+        public JsonResult RunDllTest2()
+        {
+            var dllTest = new DllTester();
+            //dllTest.RunTest();
+            var bin = System.Web.Hosting.HostingEnvironment.MapPath("");
+            var path = System.Web.Hosting.HostingEnvironment.ApplicationPhysicalPath;
+            var response = Json(path);
+            return response;
+        }
+
+        [HttpGet]
+        public ActionResult RunDllTest3()
+        {
+            var numPlayers = 2;
+            var Game = new Game();
+            var outcome = Game.PlayRounds(1);
+            ViewBag.PlayerWins = outcome.PlayerWins;
+            ViewBag.Timers = outcome.Timers;
             return View();
         }
 

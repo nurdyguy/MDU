@@ -1,0 +1,22 @@
+﻿@model MDU.Models.Poker
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<fieldset>
+    <legend>Poker</legend>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.game.id)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.game.id)
+    </div>
+</fieldset>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id=Model.id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

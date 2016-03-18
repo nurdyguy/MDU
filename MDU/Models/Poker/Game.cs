@@ -64,36 +64,47 @@ namespace MDU.Models.Poker
 
             Timers.Add(watch.Elapsed.TotalSeconds);
             watch.Restart();
-           
+
             //var startingHands = new List<HeadToHeadStat>()
             //{
             //    new HeadToHeadStat()
             //    {
-            //        Id = 1102040,
-            //        Hand0Id = 110,
-            //        Hand1Id = 2040
+            //        Id = 13463039,
+            //        Hand0Id = 1346,
+            //        Hand1Id = 3039
+            //    },
+            //    new HeadToHeadStat()
+            //    {
+            //        Id = 13463040,
+            //        Hand0Id = 1346,
+            //        Hand1Id = 3040
+            //    },
+            //    new HeadToHeadStat()
+            //    {
+            //        Id = 13463041,
+            //        Hand0Id = 1346,
+            //        Hand1Id = 3041
+            //    },
+            //    new HeadToHeadStat()
+            //    {
+            //        Id = 13463042,
+            //        Hand0Id = 1346,
+            //        Hand1Id = 3042
             //    }
-            //};
-            //var chopCount = new List<int>() { 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 
-            Parallel.ForEach(startingHands, new ParallelOptions() { MaxDegreeOfParallelism = 6 }, sh =>
+            //};
+            //13463039 13463040  13463041  13463042
+            var chopCount = new List<int>() { 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+
+            Parallel.ForEach(startingHands, new ParallelOptions() { MaxDegreeOfParallelism = 3 }, sh =>
             //startingHands.ForEach(sh =>
             {
-                //MDUContext _db = new MDUContext();
                 Hand h0 = new Hand(sh.Hand0Id);
                 Hand h1 = new Hand(sh.Hand1Id);
-                List<Hand> hands = null;
-                bool reverse = false;
-                if (h0.Cards[0].Number + h0.Cards[1].Number < h1.Cards[0].Number + h1.Cards[1].Number)
-                {
-                    reverse = true;
-                    hands = new List<Hand>() { h1, h0 };
-                }
-                else
-                {
-                    reverse = false;
-                    hands = new List<Hand>() { h0, h1 };
-                }
+                //h0.Cards = new List<Card>() { Card.Diamond2, Card.Spade9 };
+                //h1.Cards = new List<Card>() { Card.Heart6, Card.Spade2 };
+                List<Hand> hands = new List<Hand>() { h0, h1 };
+
                 Deck d = new Deck();
                 HandCalculator hc = new HandCalculator();
                 long h0w = 0;
@@ -104,34 +115,40 @@ namespace MDU.Models.Poker
                 d.RemoveCards(h1.Cards);
                 List<Card> currBoard = new List<Card>(5);
                 List<Card> nextBoard = new List<Card>(d.DealNextCards(5));
-                //List<Card> nextBoard = new List<Card>()
+                //nextBoard = new List<Card>()
                 //{
-                //    Card.Club8, Card.Diamond8, Card.Club3, Card.Heart3, Card.Diamond14
+                //    Card.Diamond3, Card.Spade3, Card.Heart2, Card.Club2, Card.Diamond7
                 //};
-                
+                long score = 0;
                 while (nextBoard != null)
                 {
                     d.AddCardsBackToDeckInOrder(currBoard);
                     currBoard = d.DealCards(nextBoard);
 
-                    var result = hc.CalculateWinner(hands , currBoard);
-                    if (result.WinningPlayerNumbers.Count > 1)                    
-                        chops++;                    
+                    //var result = hc.CalculateWinner(hands , currBoard);
+                    var result = hc.CalculateWinnerDll(hands, currBoard);
+                    score = result.WinningScore;
+                    if (result.WinningPlayerNumbers.Count > 1)
+                    {
+                        chopCount[(int)(score / 10000000000)]++;
+                        chops++;
+                    }
                     else if (result.WinningPlayerNumbers[0] == 0)
                         h0w++;
                     else if (result.WinningPlayerNumbers[0] == 1)
                         h1w++;
                     nextBoard = iCalc.GetNextHand(nextBoard, d.Cards);
+
+                    //nextBoard = null;
                 }
 
-                if(reverse)
-                    PokerRepository.UpdateHeadToHeadStatValues(sh.Id, h1w, h0w, chops);
-                else
-                    PokerRepository.UpdateHeadToHeadStatValues(sh.Id, h0w, h1w, chops);
+                PokerRepository.UpdateHeadToHeadStatValues(sh.Id, h0w, h1w, chops);
                 Debug.WriteLine("------------");
+                Debug.WriteLine("Id: " + sh.Id);
                 Debug.WriteLine("h0: " + h0w);
                 Debug.WriteLine("h1: " + h1w);
                 Debug.WriteLine("chops: " + chops);
+                //Debug.WriteLine("score: " + score);
                 Debug.WriteLine("------------");
             });
 
