@@ -1,7 +1,7 @@
-C:\Users\Your Face\Documents\Github\MDU\MDU\bin\HandCalculatorDll.dll
 C:\Users\Your Face\Documents\Github\MDU\MDU\bin\_bin_deployableAssemblies\HandCalculatorDll.dll
 C:\Users\Your Face\Documents\Github\MDU\MDU\bin\MDU.dll
 C:\Users\Your Face\Documents\Github\MDU\MDU\bin\MDU.pdb
+C:\Users\Your Face\Documents\Github\MDU\MDU\bin\HandCalculatorDll.dll
 C:\Users\Your Face\Documents\Github\MDU\MDU\bin\Antlr3.Runtime.dll
 C:\Users\Your Face\Documents\Github\MDU\MDU\bin\Dapper.dll
 C:\Users\Your Face\Documents\Github\MDU\MDU\bin\DotNetOpenAuth.AspNet.dll
@@ -81,3 +81,4 @@ C:\Users\Your Face\Documents\Github\MDU\MDU\bin\zh-Hans\System.Spatial.resources
 C:\Users\Your Face\Documents\Github\MDU\MDU\bin\zh-Hant\System.Spatial.resources.dll
 C:\Users\Your Face\Documents\Github\MDU\MDU\obj\x86\Debug\MDU.dll
 C:\Users\Your Face\Documents\Github\MDU\MDU\obj\x86\Debug\MDU.pdb
+C:\Users\Your Face\Documents\Github\MDU\MDU\obj\x86\Debug\MDU.csprojResolveAssemblyReference.cache

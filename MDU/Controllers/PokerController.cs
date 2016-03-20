@@ -124,9 +124,9 @@ namespace MDU.Controllers
         {
             var dllTest = new DllTester();
             //dllTest.RunTest();
-            var bin = System.Web.Hosting.HostingEnvironment.MapPath("");
+            var bin = System.Web.Hosting.HostingEnvironment.MapPath("/");
             var path = System.Web.Hosting.HostingEnvironment.ApplicationPhysicalPath;
-            var response = Json(path);
+            var response = Json(bin);
             return response;
         }
 

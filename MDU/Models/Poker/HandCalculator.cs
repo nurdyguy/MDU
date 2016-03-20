@@ -54,8 +54,8 @@ namespace MDU.Models.Poker
         //private static string path = System.Web.Hosting.HostingEnvironment.MapPath("/bin/HandCalculatorDll.dll");
         //[DllImport("C:\\Users\\Your Face\\Documents\\Github\\HandCalculatorDll\\Debug\\HandCalculatorDll.dll", CallingConvention = CallingConvention.Cdecl)]
         
-        [DllImport("HandCalculatorDll.dll", CallingConvention = CallingConvention.Cdecl)]
-        //[DllImport("C:\\HostingSpaces\\kayqvolg\\mathdorksunite.com\\wwwroot\\bin\\_bin_deployableAssemblies\\HandCalculatorDll.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("\\_bin_deployableAssemblies\\HandCalculatorDll.dll", CallingConvention = CallingConvention.Cdecl)]
+        //[DllImport("C:\\HostingSpaces\\kayqvolg\\mathdorksunite.com\\wwwroot\\bin\\HandCalculatorDll.dll", CallingConvention = CallingConvention.Cdecl)]
         public static extern bool CalculateWinner(int[] req);
         public RoundResult CalculateWinnerDll(List<Hand> hands, List<Card> board)
         {

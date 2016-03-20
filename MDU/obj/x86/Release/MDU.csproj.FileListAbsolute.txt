@@ -80,5 +80,5 @@ C:\Users\Your Face\Documents\Github\MDU\MDU\bin\zh-Hant\System.Spatial.resources
 C:\Users\Your Face\Documents\Github\MDU\MDU\obj\x86\Release\MDU.dll
 C:\Users\Your Face\Documents\Github\MDU\MDU\obj\x86\Release\MDU.pdb
 C:\Users\Your Face\Documents\Github\MDU\MDU\obj\x86\Release\MDU.csprojResolveAssemblyReference.cache
-C:\Users\Your Face\Documents\Github\MDU\MDU\bin\HandCalculatorDll.dll
 C:\Users\Your Face\Documents\Github\MDU\MDU\bin\_bin_deployableAssemblies\HandCalculatorDll.dll
+C:\Users\Your Face\Documents\Github\MDU\MDU\bin\HandCalculatorDll.dll
