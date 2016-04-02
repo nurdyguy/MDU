@@ -4,10 +4,11 @@
 
 
 GC_Suits = {
-    'D': {'name': 'Diamond', 'imgy': 123},
-    'S': {'name': 'Spade', 'imgy': 123},
-    'H': {'name': 'Heart', 'imgy': 123},
-    'C': {'name': 'Club', 'imgy': 123}
+    'C': {'name': 'Club', 'imgy': 123},
+    'D': {'name': 'Diamond', 'imgy': 123},    
+    'H': {'name': 'Heart', 'imgy': 123 },
+    'S': {'name': 'Spade', 'imgy': 123 }
+    
 };
 
 GC_CardNums = {
@@ -26,7 +27,10 @@ GC_CardNums = {
     14: {'displayChar': '14', 'imgx': 123}
 };
 
-
+function numberWithCommas(x)
+{
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
 
 
 

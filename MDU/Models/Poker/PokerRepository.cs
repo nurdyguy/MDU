@@ -36,7 +36,15 @@ namespace MDU.Models.Poker
             }
         }
 
-
+        public static HeadToHeadStat Get2PlayerStatById(int requestId)
+        {
+            using (var conn = OpenConnection())
+            {
+                const string query = "Select * from  HeadToHeadStats "
+                                       + " where Id = @requestId ";
+                return conn.Query<HeadToHeadStat>(query, new { requestId }).First();
+            }
+        }
 
         private static SqlConnection OpenConnection()
         {

@@ -175,7 +175,7 @@ namespace MDU.Models.Poker
                 hand = new Hand(Players[i].Hand);
                 hand.Cards.AddRange(Board);
 
-                handScore = hCalc.CalculateHandScore(hand, highScore);
+                //handScore = hCalc.CalculateHandScore(hand, highScore);
                 if (handScore == highScore)
                 {
                     winners.Add(Players[i]);

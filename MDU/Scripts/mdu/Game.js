@@ -221,7 +221,6 @@ Game.prototype.ResetStatTable = function ()
     });
 }
 
-
 Game.prototype.ResetGame = function ()
 {
 

@@ -196,10 +196,12 @@
     <Compile Include="Models\EnumClass.cs" />
     <Compile Include="Models\Poker\Card.cs" />
     <Compile Include="Models\Poker\Deck.cs" />
+    <Compile Include="Models\Poker\Depricated.cs" />
     <Compile Include="Models\Poker\DllTester.cs" />
     <Compile Include="Models\Poker\Game.cs" />
     <Compile Include="Models\Poker\Hand.cs" />
     <Compile Include="Models\Poker\HandCalculator.cs" />
+    <Compile Include="Models\Poker\HandStatProcessor.cs" />
     <Compile Include="Models\Poker\HeadToHeadStat.cs" />
     <Compile Include="Models\Poker\IterationCalculator.cs" />
     <Compile Include="Models\Poker\Player.cs" />
@@ -304,6 +306,7 @@
     <Content Include="Scripts\mdu\Deck.js" />
     <Content Include="Scripts\mdu\Game.js" />
     <Content Include="Scripts\mdu\GlobalConstants.js" />
+    <Content Include="Scripts\mdu\StatInterface.js" />
     <Content Include="Scripts\mdu\Player.js" />
     <Content Include="Scripts\mdu\Probability.js" />
     <Content Include="Scripts\mdu\Simulator.js" />

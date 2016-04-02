@@ -8,7 +8,7 @@ namespace MDU.Models.Poker
     public class Hand
     {
         public List<Card> Cards { get; set; }
-
+        public int HandId { get; set; }
         public Hand()
         {
             Cards = new List<Card>();
@@ -16,7 +16,14 @@ namespace MDU.Models.Poker
 
         public Hand(Hand h)
         {
-            Cards = new List<Card>(h.Cards);
+            Cards = new List<Card>(h.Cards.OrderBy(c => c.Id));
+            if(h.HandId == 0)
+            {
+                for (int i = 0; i < Cards.Count; i++)
+                    HandId += (int)Math.Pow(100, (Cards.Count - i - 1)) * Cards[i].Id;
+            }
+            else
+                HandId = h.HandId;
         }
 
         public Hand(int handId)
@@ -24,11 +31,14 @@ namespace MDU.Models.Poker
             Cards = new List<Card>();
             Cards.Add(Card.GetCardById(handId % 100));
             Cards.Add(Card.GetCardById(handId / 100));
+            HandId = handId;
         }
 
         public Hand(List<Card> cards)
         {
-            Cards = new List<Card>(cards);
+            Cards = new List<Card>(cards.OrderBy(c => c.Id));
+            for (int i = 0; i < Cards.Count; i++)
+                HandId += (int)Math.Pow(100, (Cards.Count - i - 1)) * Cards[i].Id;
         }
     }
 

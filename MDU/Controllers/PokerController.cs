@@ -141,7 +141,13 @@ namespace MDU.Controllers
             return View();
         }
 
-
+        [HttpPost]
+        public JsonResult GetHandStats(HandStatRequest request)
+        {
+            var handStatProcessor = new HandStatProcessor(request);
+            var response = handStatProcessor.ProcessRequest();  
+            return Json(response);
+        }
 
         protected override void Dispose(bool disposing)
         {
