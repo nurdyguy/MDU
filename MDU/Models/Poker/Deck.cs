@@ -31,7 +31,6 @@ namespace MDU.Models.Poker
             for(var i = 0; i < numCards; i++)
             {
                 int randomNumber = randGen.Next(0, Cards.Count); 
-                Debug.WriteLine(Cards[randomNumber].ShortName);
                 randomCards.Add(Cards[randomNumber]);
                 Cards.RemoveAt(randomNumber);
             }

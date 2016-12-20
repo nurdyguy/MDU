@@ -339,8 +339,10 @@ StatInterface.prototype.DisplayResults = function (result)
         
     for (var i = 0; i < result.NumWins.length; i++)
     {
-        str = 'Won: ' + numberWithCommas(result.NumWins[i]) + '<br>Lost: ' + numberWithCommas(result.TotalHands - result.NumWins[i] - result.Chops[i]) + '<br>Chopped: ' + numberWithCommas(result.Chops[i]);
-        $('#handPlayer' + (i + 1)).find('a.popoverData').attr('data-content', str).html('&nbsp;' + (result.NumWins[i] * 100 / result.TotalHands).toFixed(1) + '% ').show();
+        str = 'Won: ' + numberWithCommas(result.HandStats[i].wins) 
+            + '<br>Lost: ' + numberWithCommas(result.TotalHands - result.HandStats[i].wins - result.HandStats[i].chops) 
+            + '<br>Chopped: ' + numberWithCommas(result.HandStats[i].chops);
+        $('#handPlayer' + (i + 1)).find('a.popoverData').attr('data-content', str).html('&nbsp;' + (result.HandStats[i].wins * 100 / result.TotalHands).toFixed(1) + '% ').show();
     }
 }
 

@@ -94,7 +94,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>02/08/2016 07:57:33</publishTime>
     </File>
     <File Include="bin/MDU.dll">
-      <publishTime>04/02/2016 14:24:46</publishTime>
+      <publishTime>10/01/2016 10:26:21</publishTime>
     </File>
     <File Include="bin/Microsoft.Data.Edm.dll">
       <publishTime>02/08/2016 07:57:34</publishTime>
@@ -206,6 +206,9 @@ by editing this MSBuild file. In order to learn more about this please visit htt
     </File>
     <File Include="Content/mdu/mdu.css">
       <publishTime>03/26/2016 15:28:59</publishTime>
+    </File>
+    <File Include="Content/mdu/raffle.css">
+      <publishTime>09/17/2016 17:14:19</publishTime>
     </File>
     <File Include="Content/Site.css">
       <publishTime>07/31/2015 14:31:58</publishTime>
@@ -505,7 +508,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>02/28/2016 14:10:39</publishTime>
     </File>
     <File Include="Scripts/mdu/StatInterface.js">
-      <publishTime>04/02/2016 14:20:24</publishTime>
+      <publishTime>10/01/2016 10:14:23</publishTime>
     </File>
     <File Include="Scripts/modernizr-2.6.2.js">
       <publishTime>02/08/2016 07:57:29</publishTime>
@@ -585,6 +588,9 @@ by editing this MSBuild file. In order to learn more about this please visit htt
     <File Include="Views/Poker/TestPage.cshtml">
       <publishTime>03/21/2016 07:52:08</publishTime>
     </File>
+    <File Include="Views/Raffle/Index.cshtml">
+      <publishTime>09/17/2016 17:20:05</publishTime>
+    </File>
     <File Include="Views/Shared/Error.cshtml">
       <publishTime>07/31/2015 14:31:58</publishTime>
     </File>
@@ -601,7 +607,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>02/08/2016 07:57:24</publishTime>
     </File>
     <File Include="Web.config">
-      <publishTime>03/26/2016 11:16:15</publishTime>
+      <publishTime>09/17/2016 16:48:09</publishTime>
     </File>
     <File Include="_bin_deployableAssemblies/HandCalculatorDll.dll">
       <publishTime>03/19/2016 10:46:54</publishTime>

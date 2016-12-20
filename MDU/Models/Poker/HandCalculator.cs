@@ -44,7 +44,7 @@ namespace MDU.Models.Poker
         public List<double> Timers = new List<double>();
 
 
-        public List<long> CalculateRound(List<Hand> hands, List<Card> initBoard, List<Card> deadCards)
+        public List<long> CalculateRound_testing(List<Hand> hands, List<Card> initBoard, List<Card> deadCards)
         {
             var watch = new Stopwatch();
             watch.Start();
@@ -56,8 +56,10 @@ namespace MDU.Models.Poker
             long totalHands = 0;
 
             Deck d = new Deck();
+            //Deck2 d = new Deck2();
+            
+            //var iCalc = new IterationCalculator(52 - (hands.Count*2 + deadCards.Count) + 2);
             var iCalc = new IterationCalculator();
-
             hands.ForEach(h => 
             {
                 d.RemoveCards(h.Cards);
@@ -71,6 +73,68 @@ namespace MDU.Models.Poker
             else
                 nextBoard = new List<Card>(d.DealNextCards(5));
             long score = 0;
+            
+            // with 1.3 million loop
+            // 3.6 sec for deck manip
+            // 6.8 sec if add in iCalc3
+            // 7.8 sec if add in origin iCalc
+            // almost instant w/o loop 
+            // 
+            while (nextBoard != null)
+            //for(var i = 0; i < 1300000; i++)
+            {
+
+                d.AddCardsBackToDeckInOrder(currBoard);
+                currBoard = d.DealCards(nextBoard);
+                //Task c = Task.Run(() =>
+                //{
+                    var result = CalculateWinnerDll(hands, currBoard);
+                    score = result.WinningScore;
+                    totalHands++;
+                    if (result.WinningPlayerNumbers.Count > 1)
+                        result.WinningPlayerNumbers.ForEach(n => playerChops[n]++);
+                    else
+                        playerWins[result.WinningPlayerNumbers[0]]++;
+                //});
+                nextBoard = iCalc.GetNextHand(nextBoard, d.Cards);
+                
+            }
+
+            //Task.WaitAll(c);
+            Timers.Add(watch.Elapsed.TotalSeconds);
+            playerWins.AddRange(playerChops);
+            playerWins.Add(totalHands);
+            watch.Stop();
+            return playerWins;
+        }
+
+        public List<long> CalculateRound(List<Hand> hands, List<Card> initBoard, List<Card> deadCards)
+        {
+            var watch = new Stopwatch();
+            watch.Start();
+            Timers.Add(watch.Elapsed.TotalSeconds);
+
+            var chopCount = new List<int>() { 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+            var playerWins = new List<long>() { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+            var playerChops = new List<long>() { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+            long totalHands = 0;
+
+            Deck d = new Deck();
+            var iCalc = new IterationCalculator();
+
+            hands.ForEach(h =>
+            {
+                d.RemoveCards(h.Cards);
+            });
+            d.RemoveCards(deadCards);
+
+            List<Card> currBoard = new List<Card>(5);
+            List<Card> nextBoard;
+            if (initBoard != null && initBoard.Count > 0)
+                nextBoard = new List<Card>(d.DealNextCards(5));
+            else
+                nextBoard = new List<Card>(d.DealNextCards(5));
+            long score = 0;
             while (nextBoard != null)
             {
                 d.AddCardsBackToDeckInOrder(currBoard);
@@ -79,9 +143,9 @@ namespace MDU.Models.Poker
                 var result = CalculateWinnerDll(hands, currBoard);
                 score = result.WinningScore;
                 totalHands++;
-                if (result.WinningPlayerNumbers.Count > 1)                
-                    result.WinningPlayerNumbers.ForEach(n => playerChops[n]++);                
-                else 
+                if (result.WinningPlayerNumbers.Count > 1)
+                    result.WinningPlayerNumbers.ForEach(n => playerChops[n]++);
+                else
                     playerWins[result.WinningPlayerNumbers[0]]++;
                 nextBoard = iCalc.GetNextHand(nextBoard, d.Cards);
             }
