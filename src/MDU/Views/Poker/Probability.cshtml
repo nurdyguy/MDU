@@ -1,0 +1,326 @@
+﻿
+
+@{
+    ViewBag.Title = "Game";
+}
+
+
+
+<script type="text/javascript" src="@Url.Content("/js/Probability.js")"></script>
+<script type="text/javascript" src="@Url.Content("/js/GlobalConstants.js")"></script>
+
+<script type="text/javascript" src="@Url.Content("/js/Card.js")"></script>
+<script type="text/javascript" src="@Url.Content("/js/Deck.js")"></script>
+<script type="text/javascript" src="@Url.Content("/js/Player.js")"></script>
+
+
+
+
+
+<h2>Probability</h2>
+
+
+<div id="divGameSim"  >
+    <div class="row" style="width:100%;padding-top:5px;">
+        <div id="divGameBoard" class="col-lg-8">  
+            <h3 id="gameMessage">Winner, Player<span id="winningPlayer"></span>: <span id="winningHand"></span></h3>         
+            <div id="commCards" class="gameElem" style="left:250px;      top:140px;">
+                <img class="card" src="../../Images/card_back_sm.png" />
+                <img class="card" src="../../Images/card_back_sm.png" />
+                <img class="card" src="../../Images/card_back_sm.png" />
+                <img class="card" src="../../Images/card_back_sm.png" />
+                <img class="card" src="../../Images/card_back_sm.png" />
+            </div>
+
+            <div id="handPlayer0" class="playerHand cardsDown gameElem" style="left:40px;      top:115px;">
+                <h6>Hansel</h6>
+                <div class="hand">
+                    <img class="cardsDown" src="../../Images/card_back_sm2.png" />
+                </div>
+            </div>
+            <div id="statPlayer0" class="playerHand cardsDown gameElem" style="left:40px;      top:185px;">
+                resuts p0
+            </div>
+            <!--
+            <div id="handPlayer2" class="playerHand cardsDown gameElem" style="left:95px;      top:15px;" >
+                <h6>Jon</h6>
+                <div class="hand">
+                    <img class="cardsDown" src="../../Images/card_back_sm2.png" />
+                </div>
+            </div>
+            
+            
+            <div id="handPlayer3" class="playerHand cardsDown gameElem" style="left:245px;     top:5px;" >
+                <h6>Bubba</h6>
+                <div class="hand">
+                    <img class="cardsDown" src="../../Images/card_back_sm2.png" />
+                </div>
+            </div>
+            
+            <div id="handPlayer4" class="playerHand cardsDown gameElem" style="left:395px;     top:5px;" >
+                <h6>LeRoy</h6>
+                <div class="hand">
+                    <img class="cardsDown" src="../../Images/card_back_sm2.png" />
+                </div>
+            </div>
+            
+            <div id="handPlayer5" class="playerHand cardsDown gameElem" style="left:545px;     top:15px;" >
+                <h6>Cletus</h6>
+                <div class="hand">
+                    <img class="cardsDown" src="../../Images/card_back_sm2.png" />
+                </div>
+            </div>
+            -->
+            <div id="handPlayer1" class="playerHand cardsDown gameElem" style="left:600px;     top:115px;">
+                <h6>Carson</h6>
+                <div class="hand">
+                    <img class="cardsDown" src="../../Images/card_back_sm2.png" />
+                </div>
+            </div>
+            <div id="statPlayer1" class="playerHand cardsDown gameElem" style="left:600px;      top:185px;">
+                resuts p1
+            </div>
+            <!--
+            <div id="handPlayer7" class="playerHand cardsDown gameElem" style="left:545px;     top:215px;">
+                <h6>Collin</h6>
+                <div class="hand">
+                    <img class="cardsDown" src="../../Images/card_back_sm2.png" />
+                </div>
+            </div>
+            
+            <div id="handPlayer8" class="playerHand cardsDown gameElem" style="left:395px;     top:225px;">
+                <h6>Todd</h6>
+                <div class="hand">
+                    <img class="cardsDown" src="../../Images/card_back_sm2.png" />
+                </div>
+            </div>
+            
+            <div id="handPlayer9" class="playerHand cardsDown gameElem" style="left:245px;     top:225px;">
+                <h6>Kaely</h6>
+                <div class="hand">
+                    <img class="cardsDown" src="../../Images/card_back_sm2.png" />
+                </div>
+            </div>
+            
+            <div id="handPlayer10" class="playerHand cardsDown gameElem" style="left:95px;      top:215px;">
+                <h6>Molly</h6>
+                <div class="hand">
+                    <img class="cardsDown" src="../../Images/card_back_sm2.png" />
+                </div>
+            </div>
+            -->
+        </div>
+        <!--div id="divGameStats" class="col-lg-4">
+            <h4 >Hand Tracker</h4
+            <div><h4 style="width:50%;display:inline;">Tracking:&nbsp;</h4>
+            <select class="form-control" id="playerTrackerSelect" style="width:45%;display:inline;" onchange="game.SetPlayerTrack($(this).val())">
+                <option value="0" selected>Hansel</option>
+                <option value="1">Jon</option>
+                <option value="2">Bubba</option>
+                <option value="3">LeRoy</option>
+                <option value="4">Cletus</option>
+                <option value="5">Carson</option>
+                <option value="6">Collin</option>
+                <option value="7">Todd</option>
+                <option value="8">Kaely</option>
+                <option value="9">Molly</option>
+            </select>
+
+            </div>
+            <table id="tableHandTracker" class="table table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th></th><th>Wins</th><th>Losses</th><th>Ties</th><th>Win %</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr id="trackerOverall">
+                        <td>Overall</td>        <td>-</td><td>-</td><td>-</td><td>-</td>
+                    </tr>
+                    <tr id="trackerHand0">
+                        <td>High Card</td>      <td>-</td><td>-</td><td>-</td><td>-</td>
+                    </tr>
+                    <tr id="trackerHand2">
+                        <td>Pair</td>           <td>-</td><td>-</td><td>-</td><td>-</td>
+                    </tr>
+                    <tr id="trackerHand3">
+                        <td>Two Pair</td>       <td>-</td><td>-</td><td>-</td><td>-</td>
+                    </tr>
+                    <tr id="trackerHand4">
+                        <td>Trips</td>          <td>-</td><td>-</td><td>-</td><td>-</td>
+                    </tr>
+                    <tr id="trackerHand5">
+                        <td>Straight</td>       <td>-</td><td>-</td><td>-</td><td>-</td>
+                    </tr>
+                    <tr id="trackerHand6">
+                        <td>Flush</td>          <td>-</td><td>-</td><td>-</td><td>-</td>
+                    </tr>
+                    <tr id="trackerHand7">
+                        <td>Boat!</td>          <td>-</td><td>-</td><td>-</td><td>-</td>
+                    </tr>
+                    <tr id="trackerHand8">
+                        <td>Quads!!</td>        <td>-</td><td>-</td><td>-</td><td>-</td>
+                    </tr>
+                    <tr id="trackerHand9">
+                        <td>Holy Crap!!!</td>   <td>-</td><td>-</td><td>-</td><td>-</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div-->
+    </div>
+    <div class="row" style="width:98%; margin-left:1%;">
+        
+        <div class="form-group has-success col-lg-4">
+            <label for="inputSuccess" class="control-label" style="margin-left:16px;">Number of players:</label>
+            <select class="form-control" id="playerNumSelect" onchange="game.SetPlayers($(this).val());" style="width:110px;display:inline;">
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+                <option value="10" selected>10</option>
+            </select>
+            <label for="inputSuccess" class="control-label" style="">Number of iterations:</label>
+            <select class="form-control" id="iterSelect" style="width:110px;display:inline;">
+                <option value="1" selected>1</option>
+                <option value="10">10</option>
+                <option value="100" >100</option>
+                <option value="1000">1000</option>
+                <option value="10000">10000</option>
+                <option value="100000">100000</option>
+                <option value="1000000">1000000</option>
+            </select>
+        </div>
+        <div style="margin-top:15px;">
+            <a class="btn btn-success col-lg-2" onclick="game.BeginSimulation($('#iterSelect').val())">Get Probability</a>
+            <div class="col-lg-1"></div>
+            <a class="btn btn-danger col-lg-2" onclick="game.ResetGameTable('complete')">Reset Game Table</a>
+            <div class="col-lg-1"></div>
+            <a class="btn btn-danger col-lg-2" onclick="game.ResetStatTable()">Clear Table</a>
+        </div>
+        
+    </div>
+</div>
+<div id="divProbs" style="display:none;">
+    <h4>Below is a table of each possible starting hand along with it's liklyhood and relative rank</h4>
+    <table>
+        <thead>
+
+        </thead>
+        <tbody>
+
+        </tbody>
+    </table>
+</div>
+
+
+<div id="divModalTransparentLayer" class="modal"><div class="modal-dialog"></div></div>
+
+
+<div id="divHandPickerModal" class="modal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true" onclick="game.CloseModal_HandPicker('cancel')">×</button>
+                <h4 class="modal-title">Hand Picker</h4>
+            </div>
+            <div class="modal-body">
+                <p>Select the cards for Player <span id="spanPlayerNumber"></span></p>
+                <div id="divDeck">
+                    <div class="cardSuitRow">
+                        <img class="card" card='2C' cardId=0 src="../../Images/2C.png" />
+                        <img class="card" card='3C' cardId=1 src="../../Images/3C.png" />
+                        <img class="card" card='4C' cardId=2 src="../../Images/4C.png" />
+                        <img class="card" card='5C' cardId=3 src="../../Images/5C.png" />
+                        <img class="card" card='6C' cardId=4 src="../../Images/6C.png" />
+                        <img class="card" card='7C' cardId=5 src="../../Images/7C.png" />
+                        <img class="card" card='8C' cardId=6 src="../../Images/8C.png" />
+                        <img class="card" card='9C' cardId=7 src="../../Images/9C.png" />
+                        <img class="card" card='10C' cardId=8 src="../../Images/10C.png" />
+                        <img class="card" card='11C' cardId=9 src="../../Images/11C.png" />
+                        <img class="card" card='12C' cardId=10 src="../../Images/12C.png" />
+                        <img class="card" card='13C' cardId=11 src="../../Images/13C.png" />
+                        <img class="card" card='14C' cardId=12 src="../../Images/14C.png" />
+                    </div>
+                    <div class="cardSuitRow">
+                        <img class="card" card='2D' cardId=13 src="../../Images/2D.png" />
+                        <img class="card" card='3D' cardId=14 src="../../Images/3D.png" />
+                        <img class="card" card='4D' cardId=15 src="../../Images/4D.png" />
+                        <img class="card" card='5D' cardId=16 src="../../Images/5D.png" />
+                        <img class="card" card='6D' cardId=17 src="../../Images/6D.png" />
+                        <img class="card" card='7D' cardId=18 src="../../Images/7D.png" />
+                        <img class="card" card='8D' cardId=19 src="../../Images/8D.png" />
+                        <img class="card" card='9D' cardId=20 src="../../Images/9D.png" />
+                        <img class="card" card='10D' cardId=21 src="../../Images/10D.png" />
+                        <img class="card" card='11D' cardId=22 src="../../Images/11D.png" />
+                        <img class="card" card='12D' cardId=23 src="../../Images/12D.png" />
+                        <img class="card" card='13D' cardId=24 src="../../Images/13D.png" />
+                        <img class="card" card='14D' cardId=25 src="../../Images/14D.png" />
+                    </div>
+                    <div class="cardSuitRow">
+                        <img class="card" card='2H' cardId=26 src="../../Images/2H.png" />
+                        <img class="card" card='3H' cardId=27 src="../../Images/3H.png" />
+                        <img class="card" card='4H' cardId=28 src="../../Images/4H.png" />
+                        <img class="card" card='5H' cardId=29 src="../../Images/5H.png" />
+                        <img class="card" card='6H' cardId=30 src="../../Images/6H.png" />
+                        <img class="card" card='7H' cardId=31 src="../../Images/7H.png" />
+                        <img class="card" card='8H' cardId=32 src="../../Images/8H.png" />
+                        <img class="card" card='9H' cardId=33 src="../../Images/9H.png" />
+                        <img class="card" card='10H' cardId=34 src="../../Images/10H.png" />
+                        <img class="card" card='11H' cardId=35 src="../../Images/11H.png" />
+                        <img class="card" card='12H' cardId=36 src="../../Images/12H.png" />
+                        <img class="card" card='13H' cardId=37 src="../../Images/13H.png" />
+                        <img class="card" card='14H' cardId=38 src="../../Images/14H.png" />
+                    </div>
+                    <div class="cardSuitRow">
+                        <img class="card" card='2S' cardId=39 src="../../Images/2S.png" />
+                        <img class="card" card='3S' cardId=40 src="../../Images/3S.png" />
+                        <img class="card" card='4S' cardId=41 src="../../Images/4S.png" />
+                        <img class="card" card='5S' cardId=42 src="../../Images/5S.png" />
+                        <img class="card" card='6S' cardId=43 src="../../Images/6S.png" />
+                        <img class="card" card='7S' cardId=44 src="../../Images/7S.png" />
+                        <img class="card" card='8S' cardId=45 src="../../Images/8S.png" />
+                        <img class="card" card='9S' cardId=46 src="../../Images/9S.png" />
+                        <img class="card" card='10S' cardId=47 src="../../Images/10S.png" />
+                        <img class="card" card='11S' cardId=48 src="../../Images/11S.png" />
+                        <img class="card" card='12S' cardId=49 src="../../Images/12S.png" />
+                        <img class="card" card='13S' cardId=50 src="../../Images/13S.png" />
+                        <img class="card" card='14S' cardId=51 src="../../Images/14S.png" />
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary"  onclick="game.CloseModal_HandPicker('save')">Save</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal"  onclick="game.CloseModal_HandPicker('cancel')">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div id="divProgressBarModal" class="modal" >
+    <div class="modal-dialog modal-overlay"></div>
+    <div class="modal-dialog" style="top:35%;z-index:150;">
+        <div class="" style="">
+            <div class="progress progress-striped active" style="text-align:center;">
+                <div id="divProgressBar" class="progress progress-bar-info" style="width: 0%;height:100%;"></div>
+                <span style="position:absolute;left:40%;top:0px;color:white;">Running Simulation</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    function GetStatistics()
+    {
+        //var hand0id = 
+
+    }
+
+
+</script>
