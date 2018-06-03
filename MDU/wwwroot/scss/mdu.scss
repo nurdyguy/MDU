@@ -31,19 +31,16 @@ img.card
 {
     height: 49px;
     width: 36px;
-}
-
-img.card.selected
-{
-    height: 60px;
-    width: 52px;
-}
-
-img.card.inUse
-{
+    &.selected
+    {
+        height: 60px;
+        width: 52px;
+    }
+    &.inUse
+    {
     
+    }
 }
-
 
 #divGameSim, #divStatInterface
 {

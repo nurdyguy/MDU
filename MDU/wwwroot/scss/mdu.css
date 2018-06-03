@@ -1,4 +1,4 @@
-﻿body {
+body {
   min-width: 750px; }
 
 ol.round li {
@@ -20,10 +20,9 @@ div.navTab.active {
 img.card {
   height: 49px;
   width: 36px; }
-
-img.card.selected {
-  height: 60px;
-  width: 52px; }
+  img.card.selected {
+    height: 60px;
+    width: 52px; }
 
 #divGameSim, #divStatInterface {
   min-height: 500px;
@@ -114,4 +113,3 @@ a.popoverData {
 a.popoverData:hover {
   background-color: inherit;
   text-decoration: none; }
-

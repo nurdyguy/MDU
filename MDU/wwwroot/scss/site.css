@@ -1,4 +1,4 @@
-﻿@charset "UTF-8";
+@charset "UTF-8";
 header div.jumbotron {
   background-image: url(../images/background.jpg);
   background-repeat: no-repeat;
@@ -598,4 +598,3 @@ tr.pager td {
     padding: 10px 0; }
   footer p {
     margin: 0; } }
-
