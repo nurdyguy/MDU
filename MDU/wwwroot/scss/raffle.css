@@ -1,0 +1,106 @@
+﻿.glyphicon-info-sign {
+  font-size: 8px;
+  vertical-align: top; }
+
+.glyphicon-plus {
+  color: green; }
+
+.glyphicon-minus {
+  color: red; }
+
+#EntrantsTable {
+  width: 100%;
+  max-width: 1000px;
+  background-color: tan;
+  border-radius: 5px;
+  padding-left: 20px;
+  margin-left: 30px; }
+
+.entryRow {
+  margin-top: 15px; }
+
+#options .rowInput {
+  padding-left: 40px; }
+
+#buttons button {
+  margin-left: 80px; }
+
+.rowInput {
+  display: inline-block;
+  margin-left: 15px;
+  vertical-align: middle; }
+
+.entryRow div.leftIcon {
+  display: inline-block;
+  vertical-align: text-bottom;
+  margin-bottom: -10px; }
+
+input.numEntry {
+  width: 60px; }
+
+#AddRowButton {
+  padding-top: 20px;
+  padding-bottom: 20px;
+  height: 50px; }
+
+/* has-error overload */
+div.rowInput.has-error label {
+  color: red; }
+
+div.rowInput.has-error input {
+  border: 2px solid red;
+  color: red; }
+
+.radioGroup {
+  margin-top: 20px;
+  margin-bottom: 20px;
+  padding: 5px 5px;
+  border: 1px solid slategray;
+  border-radius: 6px; }
+
+.subRadios {
+  margin-left: 10px; }
+
+.subRadios .radio input {
+  width: 350px; }
+
+/* modal */
+.modal-content {
+  border-radius: 10px; }
+
+.modal-header {
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  margin-top: -1px;
+  background-color: slategray;
+  color: white; }
+
+.modal-body {
+  padding: 10px; }
+
+#csvTextArea {
+  height: 300px;
+  width: 500px; }
+
+.modal-footer {
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+  margin-bottom: -1px;
+  background-color: slategray;
+  color: white; }
+
+.radioLeft {
+  display: inline-block;
+  float: left; }
+
+.modal-content .radioGroup .radio,
+.modal-content .radioGroup .radio label,
+.modal-content .radioGroup .radio label input {
+  width: 100%; }
+
+#entryRowTemplate, #winnersTable {
+  display: none; }
+
+#winnersTable li {
+  font-size: 25px; }
+
