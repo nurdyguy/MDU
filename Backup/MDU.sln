@@ -1,13 +1,16 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27703.2026
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{24BD639A-B9B7-4089-878C-9F52DEF0DE1F}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{E157714B-EA57-4ED2-89F8-84870A423D15}"
+	ProjectSection(SolutionItems) = preProject
+		global.json = global.json
+	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MDU", "src\MDU\MDU.csproj", "{DE9A1DC9-8D06-45A4-A95F-079F6EFF79F1}"
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "MDU", "src\MDU\MDU.xproj", "{DE9A1DC9-8D06-45A4-A95F-079F6EFF79F1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -31,8 +34,5 @@ Global
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{DE9A1DC9-8D06-45A4-A95F-079F6EFF79F1} = {24BD639A-B9B7-4089-878C-9F52DEF0DE1F}
-	EndGlobalSection
-	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {445A8076-7999-4E21-A493-AA9FC545FF49}
 	EndGlobalSection
 EndGlobal
