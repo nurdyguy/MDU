@@ -17,6 +17,13 @@ using MDU.Services.Implementtions;
 using MDU.Repositories.Contracts;
 using MDU.Repositories.Implementations;
 
+using AccountService.Models;
+using AccountService.Services.Contracts;
+using AccountService.Services.Implementations;
+using AccountService.Repositories.Contracts;
+using AccountService.Repositories.Implementations;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Http;
 
 namespace MDU
 {
@@ -41,13 +48,19 @@ namespace MDU
             // Add framework services.
             services.AddApplicationInsightsTelemetry(Configuration);
 
-            //services.AddDbContext<ApplicationDbContext>(options =>
-            //    options.UseSqlServer(Configuration.GetConnectionString("secondaryConnection")));
+            services.AddAuthentication("MDU")
+                    .AddCookie("MDU", options =>
+                    {
+                        options.AccessDeniedPath = new PathString("/Error/404");
+                        options.LoginPath = new PathString("/Account/Login");
+                    });
 
-            //services.AddIdentity<ApplicationUser, IdentityRole>()
-            //    .AddEntityFrameworkStores<ApplicationDbContext>()
-            //    .AddDefaultTokenProviders();
-            
+            services.AddAuthorization(auth =>
+            {
+                auth.AddSecurity();
+            });
+                    
+
             services.AddMvc();
 
             // Add application services.
@@ -57,16 +70,30 @@ namespace MDU
             // services
             services.AddSingleton<IPokerService, PokerService>();
             services.AddSingleton<ICalculatorService, CalculatorService>();
+            services.AddSingleton<IPropertySalesService, PropertySalesService>();
 
             // repositories
             services.AddSingleton<IPokerRepository, PokerRepository>();
+            services.AddSingleton<IPropertySalesRepository, PropertySalesRepository>();
+            services.AddSingleton<IUserDataService, UserDataService>();
 
-            Action<MDU.MDUOptions> mduOptions = (options =>
+            services.AddSingleton<IUserRepository, UserRepository>();
+            services.AddSingleton<IUserRoleRepository, UserRoleRepository>();
+
+            Action<MDU.MDUOptions> mduOptions = (opt =>
             {
-                options.mduConnectionString = Configuration["ConnectionStrings:mduConnection"];
+                opt.mduConnectionString = Configuration["ConnectionStrings:mduConnection"];
             });
             services.Configure(mduOptions);
             services.AddSingleton(resolver => resolver.GetRequiredService<IOptions<MDUOptions>>().Value);
+
+            Action<AccountService.AccountServiceOptions> acctOptions = (opt =>
+            {
+                opt.AppDBConnection = Configuration["ConnectionStrings:mduConnection"];
+            });
+            services.Configure(acctOptions);
+            services.AddSingleton(resolver => resolver.GetRequiredService<IOptions<AccountService.AccountServiceOptions>>().Value);
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -75,21 +102,20 @@ namespace MDU
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
 
+            app.UseStaticFiles();
+            app.UseStatusCodePagesWithRedirects("/Error/{0}");
+            
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseDatabaseErrorPage();
-                app.UseBrowserLink();
+                
             }
             else
             {
                 app.UseExceptionHandler("/Home/Error");
             }
 
-            app.UseStaticFiles();
-
-            //app.UseIdentity();
-
+            app.UseAuthentication();
             // Add external authentication middleware below. To configure them please see http://go.microsoft.com/fwlink/?LinkID=532715
 
             app.UseMvc(routes =>

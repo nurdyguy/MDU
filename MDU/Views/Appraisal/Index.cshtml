@@ -1,0 +1,90 @@
+﻿@model MDU.Models.AppraisalViewModels.PropertySalesVM
+@using MDU.Authentication;
+@{
+    ViewData["Title"] = "Math Dorks UNITE!";
+}
+
+@{ 
+    
+}
+<div class="row">
+    <div class="col-md-2">
+        Street Address
+    </div>
+    <div class="col-md-3 row">
+        <div class="col-md-3">
+            Beds
+        </div>
+        <div class="col-md-3">
+            Baths
+        </div>
+        <div class="col-md-3">
+            Garage
+        </div>
+        <div class="col-md-3">
+            Pool
+        </div>
+    </div>
+    <div class="col-md-4 row">
+        <div class="col-md-4">
+            Square Feet
+        </div>
+        <div class="col-md-4">
+            Lot Size (Acres)
+        </div>
+        <div class="col-md-4">
+            Year Built
+        </div>
+    </div>
+    <div class="col-md-3 row">
+        <div class="col-md-6">
+            Close Date
+        </div>
+        <div class="col-md-6">
+            Close Price
+        </div>
+    </div>
+</div>
+    @foreach (var p in Model.PropertySales)
+    {
+        <div class="row">
+            <div class="col-md-2">
+                @p.StreetNumber @p.StreetName
+            </div>
+            <div class="col-md-3 row">
+                <div class="col-md-3">
+                    @p.Beds
+                </div>
+                <div class="col-md-3">
+                    @p.Baths
+                </div>
+                <div class="col-md-3">
+                    @p.Garage
+                </div>
+                <div class="col-md-3">
+                    @(p.Pool ? "Y" : "N")
+                </div>
+            </div>
+            <div class="col-md-4 row">
+                <div class="col-md-4">
+                    @p.SquareFeet
+                </div>
+                <div class="col-md-4">
+                    @p.LotSizeAcreage.ToString("0.##")
+                </div>
+                <div class="col-md-4">
+                    @p.YearBuilt
+                </div>
+            </div>
+            <div class="col-md-3 row">
+                <div class="col-md-6">
+                    @p.CloseDate.ToShortDateString()
+                </div>
+                <div class="col-md-6">
+                    @p.ClosePrice.ToString("$###,###")
+                </div>
+            </div>
+        </div>
+
+    }
+
