@@ -1,7 +1,11 @@
 ﻿[
   {
-    "outputFile": "wwwroot/scss/site.css",
-    "inputFile": "wwwroot/scss/site.scss"
+    "outputFile": "wwwroot/scss/layout.css",
+    "inputFile": "wwwroot/scss/layout.scss"
+  },
+  {
+    "outputFile": "wwwroot/scss/layout.css",
+    "inputFile": "wwwroot/scss/layout.scss"
   },
   {
     "outputFile": "wwwroot/scss/mdu.css",
@@ -10,5 +14,9 @@
   {
     "outputFile": "wwwroot/scss/raffle.css",
     "inputFile": "wwwroot/scss/raffle.scss"
+  },
+  {
+    "outputFile": "wwwroot/scss/appraisal.css",
+    "inputFile": "wwwroot/scss/appraisal.scss"
   }
 ]

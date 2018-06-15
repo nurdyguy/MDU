@@ -1,0 +1,10 @@
+header div.jumbotron {
+  background-image: url(../images/background.jpg);
+  background-repeat: no-repeat;
+  width: 100%;
+  background-size: cover; }
+
+#body.container {
+  background-color: #272b30;
+  padding-top: 20px;
+  padding-bottom: 20px; }
