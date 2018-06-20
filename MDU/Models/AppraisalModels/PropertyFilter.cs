@@ -16,7 +16,7 @@ namespace MDU.Models.AppraisalModels
         public static readonly PropertyFilter Baths = new PropertyFilter(1, "Baths", "Baths", "baths", PropertyFilterValue.PropertyFilterValues(1));        
         public static readonly PropertyFilter Garage = new PropertyFilter(2, "Garage", "Garage", "garage", PropertyFilterValue.PropertyFilterValues(2));
         public static readonly PropertyFilter Pool = new PropertyFilter(3, "Pool", "Pool", "pool", PropertyFilterValue.PropertyFilterValues(3));
-        public static readonly PropertyFilter SquareFeet = new PropertyFilter(4, "SquareFootage", "Square Feet", "sqft", PropertyFilterValue.PropertyFilterValues(4));
+        public static readonly PropertyFilter SquareFeet = new PropertyFilter(4, "SquareFeet", "Square Feet", "sqft", PropertyFilterValue.PropertyFilterValues(4));
         public static readonly PropertyFilter LotSize = new PropertyFilter(5, "LotSizeAcreage", "Lot Size (Acres)", "lotSize", PropertyFilterValue.PropertyFilterValues(5));
         public static readonly PropertyFilter YearBuilt = new PropertyFilter(6, "YearBuilt", "Year Built", "yearBuilt", PropertyFilterValue.PropertyFilterValues(6));
         public static readonly PropertyFilter CloseDate = new PropertyFilter(7, "CloseDate", "Close Date", "closeDate", PropertyFilterValue.PropertyFilterValues(7));
