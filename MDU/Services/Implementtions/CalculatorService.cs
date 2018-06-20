@@ -879,6 +879,41 @@ namespace MDU.Services.Implementtions
         }
         #endregion
 
+        #region LinearRegression
+        public List<double> CalculateLinearRegression(List<double> xVals, List<double> yVals)
+        {
+            if (!xVals.Any() || !yVals.Any() || xVals.Count() != yVals.Count())
+                throw new Exception("Invalid Input");
+
+            // y = a + bx with r2 value
+
+            double a = 0;
+            double b = 0;
+            double r2 = 0;
+
+            var xMean = xVals.Average();
+            var yMean = yVals.Average();
+
+            double ss_xx = 0;
+            double ss_yy = 0;
+            double ss_xy = 0;
+
+            for (var i = 0; i < xVals.Count(); i++)
+            {
+                ss_xx += (xVals[i] - xMean) * (xVals[i] - xMean);
+                ss_yy += (yVals[i] - yMean) * (yVals[i] - yMean);
+                ss_xy += (xVals[i] - xMean) * (yVals[i] - yMean);
+            }
+
+            b = ss_xy / ss_xx;
+            a = yMean - b * xMean;
+            r2 = (ss_xy * ss_xy) / (ss_xx * ss_yy);
+            
+            return new List<double>() { a, b, r2 };
+        }
+
         
+
+        #endregion
     }
 }

@@ -45,5 +45,8 @@ namespace MDU.Services.Contracts
 
         #endregion
 
+        #region LinearRegression
+        List<double> CalculateLinearRegression(List<double> xVals, List<double> yVals);
+        #endregion
     }
 }

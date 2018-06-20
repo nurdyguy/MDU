@@ -34,27 +34,27 @@ namespace MDU.Models.AppraisalModels
     //)
 
     //create table PropertySales(
-    //	Id		 						int identity(1,1) not null,
-    //	StreetNumber 					decimal not null,
-    //	StreetName						varchar(50) not null,
-    //	Beds							int null,
-    //	Baths							decimal null,
-    //	Garage							int null,
-    //	Pool							bit null,	
-    //	SquareFootage					int null,
-    //	LotSizeAcreage					decimal null,
-    //	YearBuilt						int null,
-    //	PropertyConditionId				int null,
-    //	CloseDate 						datetime null,
-    //	ClosePrice 						int null,
+    //    Id                              int identity(1,1) not null,
+    //	StreetNumber decimal not null,
+    //	StreetName varchar(50) not null,
+    //	Beds int null,
+    //	Baths float null,
+    //	Garage int null,
+    //	Pool bit null,	
+    //	SquareFeet int null,
+    //	LotSizeAcreage float null,
+    //	YearBuilt int null,
+    //	PropertyConditionId int null,
+    //	CloseDate datetime null,
+    //	ClosePrice int null,
 
 
-    //	constraint PK_Property_Id Primary Key (Id),
-    //	constraint FK_PropertyCondition_PropertyConditionId Foreign Key (PropertyConditionId) References PropertyConditions(Id)
+    //	constraint PK_Property_Id Primary Key(Id),
+    //	constraint FK_PropertyCondition_PropertyConditionId Foreign Key(PropertyConditionId) References PropertyConditions(Id)
     //)
 
-    //insert into PropertySales 
-    //(StreetNumber,	StreetName,	Beds,	Baths,	Garage,	Pool,	SquareFootage,	LotSizeAcreage,	YearBuilt,	CloseDate,	ClosePrice)
+    //insert into PropertySales
+    //(StreetNumber, StreetName, Beds, Baths, Garage, Pool, SquareFeet, LotSizeAcreage, YearBuilt, CloseDate, ClosePrice)
     //values
     //(1521	,'Sugar Bush	',3	,2		,2	,0	,1783	,0.13	,2000	,'9/30/2015'	,213000),
     //(307	,'Broadmoor		',3	,2		,2	,0	,1783	,0.13	,2000	,'1/15/2016'	,220000),
@@ -136,6 +136,6 @@ namespace MDU.Models.AppraisalModels
     //(1409	,'Stillforest	',5	,4		,3	,0	,3385	,0.2	,2000	,'4/25/2017'	,370000),
     //(1401	,'Fieldstone	',5	,4		,3	,0	,3908	,0.27	,1999	,'5/8/2018'		,420000)
 
-    // kill tab whitespace
+    // --kill tab whitespace
     //update propertysales set StreetName = replace(streetname, char(9), '')
 }

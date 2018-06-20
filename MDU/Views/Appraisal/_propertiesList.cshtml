@@ -1,0 +1,54 @@
+﻿@model List<MDU.Models.AppraisalModels.PropertySale>
+@using MDU.Authentication;
+@{
+    ViewData["Title"] = "Math Dorks UNITE!";
+}
+
+@{ 
+    
+}
+
+
+@foreach (var p in Model)
+{
+    <div class="row col-md-12">
+        <div class="col-md-2">
+            @p.StreetNumber @p.StreetName
+        </div>
+        <div class="col-md-3 row">
+            <div class="col-md-3">
+                @p.Beds
+            </div>
+            <div class="col-md-3">
+                @p.Baths
+            </div>
+            <div class="col-md-3">
+                @p.Garage
+            </div>
+            <div class="col-md-3">
+                @(p.Pool ? "Y" : "N")
+            </div>
+        </div>
+        <div class="col-md-4 row">
+            <div class="col-md-4">
+                @p.SquareFeet
+            </div>
+            <div class="col-md-4">
+                @p.LotSizeAcreage.ToString("0.##")
+            </div>
+            <div class="col-md-4">
+                @p.YearBuilt
+            </div>
+        </div>
+        <div class="col-md-3 row">
+            <div class="col-md-6 closeDate" data-closing-date="@p.CloseDate.ToShortDateString()">
+                @p.CloseDate.ToShortDateString()
+            </div>
+            <div class="col-md-6 closingPrice" data-closing-price="@p.ClosePrice">
+                @p.ClosePrice.ToString("$###,###")
+            </div>
+        </div>
+    </div>
+
+}
+

@@ -1,90 +1,424 @@
 ﻿@model MDU.Models.AppraisalViewModels.PropertySalesVM
 @using MDU.Authentication;
+@using MDU.Models.AppraisalModels;
 @{
     ViewData["Title"] = "Math Dorks UNITE!";
 }
 
-@{ 
-    
+@{
+<script>
+    var filters = {};
+    @foreach (var pf in PropertyFilter.PropertyFilters())
+    {
+        <text>
+        filters['@pf.ShortName'] = 
+        {
+            'Values': @Html.Raw(Json.Serialize(pf.Values.Select(v => v.Value))),
+            'Ids': @Html.Raw(Json.Serialize(pf.Values.Select(v => v.Id)))
+        }
+        </text>
+    }
+   
+</script>
 }
-<div class="row">
-    <div class="col-md-2">
-        Street Address
-    </div>
-    <div class="col-md-3 row">
-        <div class="col-md-3">
-            Beds
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/handsontable/3.0.0/handsontable.min.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ion-rangeslider/2.2.0/css/ion.rangeSlider.min.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ion-rangeslider/2.2.0/css/ion.rangeSlider.skinSimple.min.css" />
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/handsontable/3.0.0/handsontable.min.js"></script>
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ion-rangeslider/2.2.0/js/ion.rangeSlider.min.js"></script>
+
+<script src="~/js/Appraisal.js"></script>
+
+<div id="graph">
+
+</div>
+
+<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+    <div class="panel panel-default">
+        <div class="panel-heading" role="tab" id="headingOne">
+            <h4 class="panel-title">
+                <span class="glyphicon glyphicon-menu-hamburger" aria-hidden="true"></span>
+                <button class="btn btn-primary" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                    Search Filters
+                </button>                
+            </h4>
+            <h4>
+                <button id="runLinearRegression" class="btn btn-secondary"  aria-expanded="true">
+                    Run Linear Regression
+                </button>
+            </h4>
         </div>
-        <div class="col-md-3">
-            Baths
-        </div>
-        <div class="col-md-3">
-            Garage
-        </div>
-        <div class="col-md-3">
-            Pool
-        </div>
-    </div>
-    <div class="col-md-4 row">
-        <div class="col-md-4">
-            Square Feet
-        </div>
-        <div class="col-md-4">
-            Lot Size (Acres)
-        </div>
-        <div class="col-md-4">
-            Year Built
-        </div>
-    </div>
-    <div class="col-md-3 row">
-        <div class="col-md-6">
-            Close Date
-        </div>
-        <div class="col-md-6">
-            Close Price
+        <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+            <div class="panel-body">
+                <div id="PropertyFilters" class="row col-md-12">
+                    <div class="row col-md-12">
+                        <div class="row col-md-10">
+                            <div class="col-md-4 form-group filterGroup" data-filter-id="@PropertyFilter.Beds.Id" data-filter-shortname="@PropertyFilter.Beds.ShortName">
+                                <div class="form-check">
+                                    <input type="checkbox" class="form-check-input" id="bedsCheckbox">
+                                    <label class="form-check-label" for="bedsCheckbox">@PropertyFilter.Beds.Name</label>
+                                </div>
+                                <div class="form-group">
+                                    <input type="text" id="@PropertyFilter.Beds.ShortName-slider" class="slider" />
+                                </div>
+                            </div>
+                            <div class="col-md-4 form-group filterGroup" data-filter-id="@PropertyFilter.Baths.Id" data-filter-shortname="@PropertyFilter.Baths.ShortName">
+                                <div class="form-check">
+                                    <input type="checkbox" class="form-check-input" id="bathsCheckbox">
+                                    <label class="form-check-label" for="bathsCheckbox">@PropertyFilter.Baths.Name</label>
+                                </div>
+                                <div class="form-group">
+                                    <input type="text" id="@PropertyFilter.Baths.ShortName-slider" class="slider" />
+                                </div>
+                            </div>
+                            <div class="col-md-4 form-group filterGroup" data-filter-id="@PropertyFilter.Garage.Id" data-filter-shortname="@PropertyFilter.Garage.ShortName">
+                                <div class="form-check">
+                                    <input type="checkbox" class="form-check-input" id="garageCheckbox">
+                                    <label class="form-check-label" for="garageCheckbox">@PropertyFilter.Garage.Name</label>
+                                </div>
+                                <div class="form-group">
+                                    <input type="text" id="@PropertyFilter.Garage.ShortName-slider" class="slider" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="col-md-12 form-group filterGroup" data-filter-id="@PropertyFilter.Pool.Id" data-filter-shortname="@PropertyFilter.Pool.ShortName">
+                                <div class="form-check">
+                                    <input type="checkbox" class="form-check-input" id="poolCheckbox">
+                                    <label class="form-check-label" for="poolCheckbox">@PropertyFilter.Pool.Name</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" name="poolFilter" type="radio" value="@PropertyFilter.Pool.Values.ElementAt(0).Id" checked />
+                                    <label class="form-check-label" for="exampleRadios1">@PropertyFilter.Pool.Values.ElementAt(0).Description</label><br />
+                                    <input class="form-check-input" name="poolFilter" type="radio" value="@PropertyFilter.Pool.Values.ElementAt(1).Id" />
+                                    <label class="form-check-label" for="exampleRadios1">@PropertyFilter.Pool.Values.ElementAt(1).Description</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row col-md-12">
+                        <div class="col-md-3 form-group filterGroup" data-filter-id="@PropertyFilter.SquareFeet.Id" data-filter-shortname="@PropertyFilter.SquareFeet.ShortName">
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="sqftCheckbox">
+                                <label class="form-check-label" for="sqftCheckbox">@PropertyFilter.SquareFeet.Name</label>
+                            </div>
+                            <div class="form-group">
+                                <input type="text" id="@PropertyFilter.SquareFeet.ShortName-slider" class="slider" />
+                            </div>
+                        </div>
+                        <div class="col-md-3 form-group filterGroup" data-filter-id="@PropertyFilter.LotSize.Id" data-filter-shortname="@PropertyFilter.LotSize.ShortName">
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="lotCheckbox">
+                                <label class="form-check-label" for="lotCheckbox">@PropertyFilter.LotSize.Name</label>
+                            </div>
+                            <div class="form-group">
+                                <input type="text" id="@PropertyFilter.LotSize.ShortName-slider" class="slider" />
+                            </div>
+                        </div>
+                        <div class="col-md-3 form-group filterGroup" data-filter-id="@PropertyFilter.YearBuilt.Id" data-filter-shortname="@PropertyFilter.YearBuilt.ShortName">
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="yearCheckbox">
+                                <label class="form-check-label" for="yearCheckbox">@PropertyFilter.YearBuilt.Name</label>
+                            </div>
+                            <div class="form-group">
+                                <input type="text" id="@PropertyFilter.YearBuilt.ShortName-slider" class="slider" />
+                            </div>
+                        </div>
+                        <div class="col-md-3 form-group filterGroup" data-filter-id="@PropertyFilter.CloseDate.Id" data-filter-shortname="@PropertyFilter.CloseDate.ShortName">
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="closeCheckbox">
+                                <label class="form-check-label" for="closeCheckbox">@PropertyFilter.CloseDate.Name</label>
+                            </div>
+                            <div class="form-group">
+                                <input type="text" id="@PropertyFilter.CloseDate.ShortName-slider" class="slider" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row col-md-12">
+                        <button id="submit" class="btn btn-success col-md-2 col-md-offset-8">Get Results</button>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
-    @foreach (var p in Model.PropertySales)
-    {
-        <div class="row">
+
+
+<p></p>
+
+<div id="propertyTable" class="row">
+    <div class="tableHead col-md-12 row">
+        <div class="col-md-12 row">
             <div class="col-md-2">
-                @p.StreetNumber @p.StreetName
+                Street Address
             </div>
             <div class="col-md-3 row">
                 <div class="col-md-3">
-                    @p.Beds
+                    Beds
                 </div>
                 <div class="col-md-3">
-                    @p.Baths
+                    Baths
                 </div>
                 <div class="col-md-3">
-                    @p.Garage
+                    Garage
                 </div>
                 <div class="col-md-3">
-                    @(p.Pool ? "Y" : "N")
+                    Pool
                 </div>
             </div>
             <div class="col-md-4 row">
                 <div class="col-md-4">
-                    @p.SquareFeet
+                    Square Feet
                 </div>
                 <div class="col-md-4">
-                    @p.LotSizeAcreage.ToString("0.##")
+                    Lot Size (Acres)
                 </div>
                 <div class="col-md-4">
-                    @p.YearBuilt
+                    Year Built
                 </div>
             </div>
             <div class="col-md-3 row">
                 <div class="col-md-6">
-                    @p.CloseDate.ToShortDateString()
+                    Close Date
                 </div>
                 <div class="col-md-6">
-                    @p.ClosePrice.ToString("$###,###")
+                    Close Price
                 </div>
             </div>
         </div>
+    </div>
+    <div class="tableBody col-md-12 row">
+        @Html.Partial("~/Views/Appraisal/_propertiesList.cshtml", Model.PropertySales)
+    </div>
 
-    }
+</div>
+
+<div class="modal fade" id="filterModal" tabindex="-1" role="dialog" aria-labelledby="filterModal">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span class="icon-remove" aria-hidden="true"></span></button>
+
+                <div class="row">
+                    <div class="col-lg-8 col-md-8 col-sm-8 col-xs-1 nopad">
+                        <h4 class="modal-title">Search Filters</h4>
+                    </div>
+
+
+                </div>
+
+            </div>
+
+            <div class="modal-body">
+                <div id="PropertyFilters" class="row col-md-12">
+                    <h2>Search Filters</h2>
+                    <div class="row col-md-12">
+                        <div class="col-md-3 form-group filterGroup" data-filter-id="@PropertyFilter.Beds.Id">
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="bedsCheckbox">
+                                <label class="form-check-label" for="bedsCheckbox">@PropertyFilter.Beds.Name</label>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-check-label" for="bedsFrom">From: </label>
+                                <select class="form-control" id="bedsFrom">
+                                    @foreach (var pfv in PropertyFilter.Beds.Values)
+                                    {
+                                        <option value="@pfv.Id">@pfv.Description</option>
+                                    }
+                                </select>
+                                <label class="form-check-label" for="bedsTo">To: </label>
+                                <select class="form-control" id="bedsTo">
+                                    @foreach (var pfv in PropertyFilter.Beds.Values)
+                                    {
+                                        <option value="@pfv.Id">@pfv.Description</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-3 form-group filterGroup" data-filter-id="@PropertyFilter.Baths.Id">
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="bathsCheckbox">
+                                <label class="form-check-label" for="bathsCheckbox">@PropertyFilter.Baths.Name</label>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-check-label" for="bathsFrom">From: </label>
+                                <select class="form-control" id="bathsFrom">
+                                    @foreach (var pfv in PropertyFilter.Baths.Values)
+                                    {
+                                        <option value="@pfv.Id">@pfv.Description</option>
+                                    }
+                                </select>
+                                <label class="form-check-label" for="bathsTo">To: </label>
+                                <select class="form-control" id="bathsTo">
+                                    @foreach (var pfv in PropertyFilter.Baths.Values)
+                                    {
+                                        <option value="@pfv.Id">@pfv.Description</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-3 form-group filterGroup" data-filter-id="@PropertyFilter.Garage.Id">
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="garageCheckbox">
+                                <label class="form-check-label" for="garageCheckbox">@PropertyFilter.Garage.Name</label>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-check-label" for="garageFrom">From: </label>
+                                <select class="form-control" id="garageFrom">
+                                    @foreach (var pfv in PropertyFilter.Garage.Values)
+                                    {
+                                        <option value="@pfv.Id">@pfv.Description</option>
+                                    }
+                                </select>
+                                <label class="form-check-label" for="garageTo">To: </label>
+                                <select class="form-control" id="garageTo">
+                                    @foreach (var pfv in PropertyFilter.Garage.Values)
+                                    {
+                                        <option value="@pfv.Id">@pfv.Description</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-3 form-group filterGroup" data-filter-id="@PropertyFilter.Pool.Id">
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="poolCheckbox">
+                                <label class="form-check-label" for="poolCheckbox">@PropertyFilter.Pool.Name</label>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-check-label" for="bedsSelect"></label>
+                                <select class="form-control" id="bedsSelect">
+                                    @foreach (var pfv in PropertyFilter.Pool.Values)
+                                    {
+                                        <option value="@pfv.Id">@pfv.Description</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row col-md-12">
+                        <div class="col-md-3 form-group filterGroup" data-filter-id="@PropertyFilter.SquareFeet.Id">
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="sqftCheckbox">
+                                <label class="form-check-label" for="sqftCheckbox">@PropertyFilter.SquareFeet.Name</label>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-check-label" for="sqftFrom">From: </label>
+                                <select class="form-control" id="sqftFrom">
+                                    @foreach (var pfv in PropertyFilter.SquareFeet.Values)
+                                    {
+                                        <option value="@pfv.Id">@pfv.Description</option>
+                                    }
+                                </select>
+                                <label class="form-check-label" for="sqftTo">To: </label>
+                                <select class="form-control" id="sqftTo">
+                                    @foreach (var pfv in PropertyFilter.SquareFeet.Values)
+                                    {
+                                        <option value="@pfv.Id">@pfv.Description</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-3 form-group filterGroup" data-filter-id="@PropertyFilter.LotSize.Id">
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="lotCheckbox">
+                                <label class="form-check-label" for="lotCheckbox">@PropertyFilter.LotSize.Name</label>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-check-label" for="lotFrom">From: </label>
+                                <select class="form-control" id="lotFrom">
+                                    @foreach (var pfv in PropertyFilter.LotSize.Values)
+                                    {
+                                        <option value="@pfv.Id">@pfv.Description</option>
+                                    }
+                                </select>
+                                <label class="form-check-label" for="lotTo">To: </label>
+                                <select class="form-control" id="lotTo">
+                                    @foreach (var pfv in PropertyFilter.LotSize.Values)
+                                    {
+                                        <option value="@pfv.Id">@pfv.Description</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-3 form-group filterGroup" data-filter-id="@PropertyFilter.YearBuilt.Id">
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="yearCheckbox">
+                                <label class="form-check-label" for="yearCheckbox">@PropertyFilter.YearBuilt.Name</label>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-check-label" for="yearFrom">From: </label>
+                                <select class="form-control" id="yearFrom">
+                                    @foreach (var pfv in PropertyFilter.YearBuilt.Values)
+                                    {
+                                        <option value="@pfv.Id">@pfv.Description</option>
+                                    }
+                                </select>
+                                <label class="form-check-label" for="yearTo">To: </label>
+                                <select class="form-control" id="yearTo">
+                                    @foreach (var pfv in PropertyFilter.YearBuilt.Values)
+                                    {
+                                        <option value="@pfv.Id">@pfv.Description</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-3 form-group filterGroup" data-filter-id="@PropertyFilter.CloseDate.Id">
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="closeCheckbox">
+                                <label class="form-check-label" for="closeCheckbox">@PropertyFilter.CloseDate.Name</label>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-check-label" for="closeFrom">From: </label>
+                                <select class="form-control" id="closeFrom">
+                                    @foreach (var pfv in PropertyFilter.CloseDate.Values)
+                                    {
+                                        <option value="@pfv.Id">@pfv.Description</option>
+                                    }
+                                </select>
+                                <label class="form-check-label" for="closeTo">To: </label>
+                                <select class="form-control" id="closeTo">
+                                    @foreach (var pfv in PropertyFilter.CloseDate.Values)
+                                    {
+                                        <option value="@pfv.Id">@pfv.Description</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row col-md-12">
+                        <button id="submit" class="btn btn-primary col-md-3 col-md-offset-8">Get Results</button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="modalFooterRow" class="row">
+                <div id="paginationWrapper" class="col-lg-12 col-md-12 col-sm-12 col-xs-12 col-center">
+                    <ul class="pagedList pagination" id="pageNumberList">
+                        <li class="page-left disabled">
+                            <a class="btn btn-circle">
+                                <span class="icon-carrot-left" aria-hidden="true"></span>
+                            </a>
+                        </li>
+                        <li class="page-number active" data-pagenum="1"><a href="#">1</a></li>
+                        <li class="page-number" data-pagenum="2"><a href="#">2</a></li>
+                        <li class="page-number" data-pagenum="3"><a href="#">3</a></li>
+                        <li class="page-number" data-pagenum="4"><a href="#">4</a></li>
+                        <li class="page-number" data-pagenum="last"><a href="#">5</a></li>
+                        <li class="page-right">
+                            <a class="btn btn-circle">
+                                <span class="icon-carrot-right" aria-hidden="true"></span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 

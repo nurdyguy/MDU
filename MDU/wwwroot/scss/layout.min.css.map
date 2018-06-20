@@ -1,0 +1,1 @@
+{"version":3,"names":[],"mappings":"","sources":["layout.css"],"sourcesContent":["header div.jumbotron {\n  background-image: url(../images/background.jpg);\n  background-repeat: no-repeat;\n  width: 100%;\n  background-size: cover; }\n\n#body.container {\n  background-color: #272b30;\n  padding-top: 20px;\n  padding-bottom: 20px; }\n"],"file":"layout.min.css"}
