@@ -4,32 +4,30 @@ using System.Text;
 using System.Numerics;
 using System.Diagnostics;
 
+using _combRepo = MathService.Repositories.Constants.CombinationsRepository;
 
 namespace MathService.Calculators
 {
-    public partial class Calculator
+    public static partial class Calculator
     {
-
-
-
         // Encoding/Decoding a combination implies an order:
         //      lexicographic means (0, 1, 2, 3, 4, ..., max) is the very first combination so id = 1
         // 
         // converts Combination into integer
         // max is the largest possible number
-        public BigInteger EncodeCombination(List<int> comb, int max)
+        public static BigInteger EncodeCombination(List<int> comb, int max)
         {
-            var id = nCr(max + 1, comb.Count);
+            var id = _combRepo.nCr(max + 1, comb.Count);
             for (int i = 0; i < comb.Count; i++)
-                id -= nCr(max - comb[i], comb.Count - i);
+                id -= _combRepo.nCr(max - comb[i], comb.Count - i);
             return id;            
         }
 
         // gets Combination from integer 
-        public List<int> DecodeCombination(BigInteger id, int max, int combLength)
+        public static List<int> DecodeCombination(BigInteger id, int max, int combLength)
         {
             List<int> comb = new List<int>(combLength);
-            var tId = nCr(max + 1, combLength) - id;
+            var tId = _combRepo.nCr(max + 1, combLength) - id;
             for (int i = combLength; i > 0; i--)
             {
                 var tVal = BigInteger.Zero;
@@ -37,7 +35,7 @@ namespace MathService.Calculators
                 int pos = 0;
                 while (!done)
                 {
-                    var t = nCr(max - pos, i);
+                    var t = _combRepo.nCr(max - pos, i);
                     if (t <= tId)
                     {
                         tVal = t;
@@ -53,12 +51,12 @@ namespace MathService.Calculators
 
         }
         
-        public List<List<int>> GenAllCombinations(int max)
+        public static List<List<int>> GenAllCombinations(int max)
         {
             var combs = new List<List<int>>();
             for (var i = 0; i <= max; i++)
             {
-                var num = nCr(max, i);
+                var num = _combRepo.nCr(max, i);
                 for (var id = BigInteger.One; id <= num; id++)
                 {
                     var comb = DecodeCombination(id, max - 1, i);
@@ -67,6 +65,11 @@ namespace MathService.Calculators
             }
 
             return combs;
+        }
+
+        public static BigInteger nCr(BigInteger n, BigInteger r)
+        {
+            return _combRepo.nCr(n, r);
         }
     }
 

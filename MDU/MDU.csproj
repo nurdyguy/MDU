@@ -35,6 +35,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\AccountService\AccountService.csproj" />
+    <ProjectReference Include="..\EulerService\EulerService.csproj" />
+    <ProjectReference Include="..\MathService\MathService.csproj" />
   </ItemGroup>
 
 </Project>

@@ -5,7 +5,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -22,8 +23,10 @@ using AccountService.Services.Contracts;
 using AccountService.Services.Implementations;
 using AccountService.Repositories.Contracts;
 using AccountService.Repositories.Implementations;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Http;
+
+
+using EulerService.Contracts;
+using EulerService.Implementations;
 
 namespace MDU
 {
@@ -63,22 +66,8 @@ namespace MDU
 
             services.AddMvc();
 
-            // Add application services.
-            services.AddTransient<IEmailSender, AuthMessageSender>();
-            services.AddTransient<ISmsSender, AuthMessageSender>();
-            
-            // services
-            services.AddSingleton<IPokerService, PokerService>();
-            services.AddSingleton<ICalculatorService, CalculatorService>();
-            services.AddSingleton<IPropertySalesService, PropertySalesService>();
-
-            // repositories
-            services.AddSingleton<IPokerRepository, PokerRepository>();
-            services.AddSingleton<IPropertySalesRepository, PropertySalesRepository>();
-            services.AddSingleton<IUserDataService, UserDataService>();
-
-            services.AddSingleton<IUserRepository, UserRepository>();
-            services.AddSingleton<IUserRoleRepository, UserRoleRepository>();
+            RegisterDependencies(services);
+            MathService.Calculators.Calculator.InitializeCalculator();
 
             Action<MDU.MDUOptions> mduOptions = (opt =>
             {
@@ -124,6 +113,28 @@ namespace MDU
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
+        }
+
+        private void RegisterDependencies(IServiceCollection services)
+        {
+            // Add application services.
+            services.AddTransient<IEmailSender, AuthMessageSender>();
+            services.AddTransient<ISmsSender, AuthMessageSender>();
+
+            // services
+            services.AddSingleton<IPokerService, PokerService>();
+            services.AddSingleton<ICalculatorService, CalculatorService>();
+            services.AddSingleton<IPropertySalesService, PropertySalesService>();
+
+            // repositories
+            services.AddSingleton<IPokerRepository, PokerRepository>();
+            services.AddSingleton<IPropertySalesRepository, PropertySalesRepository>();
+            services.AddSingleton<IUserDataService, UserDataService>();
+
+            services.AddSingleton<IUserRepository, UserRepository>();
+            services.AddSingleton<IUserRoleRepository, UserRoleRepository>();
+
+            services.AddSingleton<IEulerService, EulerService.Implementations.EulerService>();
         }
     }
 }

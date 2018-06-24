@@ -4,7 +4,6 @@ using System.Diagnostics;
 using System.Linq;
 using System.Numerics;
 using System.Threading.Tasks;
-using MathService.Services.Contracts;
 
 namespace MathService.Services.Implementations
 {
