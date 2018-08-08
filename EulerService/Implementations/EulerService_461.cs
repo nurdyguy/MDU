@@ -5,13 +5,11 @@ using System.Text;
 using System.Linq;
 using System.Diagnostics;
 
-using EulerService.Contracts;
-
 using _calc = MathService.Calculators.Calculator;
 
 namespace EulerService.Implementations
 {
-    public partial class EulerService : IEulerService    
+    public static class EulerProblem461
     {
         //https://projecteuler.net/problem=461 difficulty: 30% ---------------completed
         //
@@ -36,8 +34,9 @@ namespace EulerService.Implementations
         // 
         // 
 
-        public object RunProblem461(int num)
+        public static object RunProblem(double x, double y = 0, double z = 0)
         {
+            var num = (int)x;
             var total = (ulong)0;
 
             var dmax = FindNextLargestNum(num, 0, 0, 0);
@@ -92,14 +91,14 @@ namespace EulerService.Implementations
 
         // result so that e^(x/num) - 1 ~ approx
         // ~ num*ln(approx + 1)
-        private int FindNextLargestNum(int num, int x, int y, int z)
+        private static int FindNextLargestNum(int num, int x, int y, int z)
         {
             var currApprox = Math.Abs(CalcTotal(num, x, y, z, 0) - Math.PI);
 
             return (int)(num * Math.Log(currApprox + 1));
         }
-        
-        private double CalcTotal(int num, int a, int b, int c, int d)
+
+        private static double CalcTotal(int num, int a, int b, int c, int d)
         {
             return Math.Pow(Math.E, (double)a / num) 
                     + Math.Pow(Math.E, (double)b / num) 
@@ -107,7 +106,7 @@ namespace EulerService.Implementations
                     + Math.Pow(Math.E, (double)d / num) - 4;
         }
 
-        private int GetLevelMin(int num, int x, int y)
+        private static int GetLevelMin(int num, int x, int y)
         {
             var currApprox = Math.Abs(CalcTotal(num, x, y, 0, 0) - Math.PI);
             if(x == 0)

@@ -60,5 +60,28 @@ namespace MathService.Calculators
                 pow++;
             return pow - 1;
         }
+
+        public static Dictionary<long, int> GetPrimeFactorization(long num)
+        {
+            var factorization = new Dictionary<long, int>();
+            var primes = GetAllPrimes((int)Math.Sqrt(num));
+
+            for (var i = 0; i < primes.Count; i++)
+            {
+                var power = 0;
+                while (num % primes[i] == 0)
+                {
+                    power++;
+                    num /= primes[i];
+                }
+                if (power > 0)
+                    factorization.Add(primes[i], power);
+            }
+
+            if (num > 1)
+                factorization.Add(num, 1);
+
+            return factorization;
+        }
     }
 }

@@ -25,8 +25,6 @@ using AccountService.Repositories.Contracts;
 using AccountService.Repositories.Implementations;
 
 
-using EulerService.Contracts;
-using EulerService.Implementations;
 
 namespace MDU
 {
@@ -134,7 +132,6 @@ namespace MDU
             services.AddSingleton<IUserRepository, UserRepository>();
             services.AddSingleton<IUserRoleRepository, UserRoleRepository>();
 
-            services.AddSingleton<IEulerService, EulerService.Implementations.EulerService>();
         }
     }
 }

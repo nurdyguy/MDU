@@ -7,13 +7,11 @@ using System.Diagnostics;
 using System.IO;
 using System.Text.RegularExpressions;
 
-using EulerService.Contracts;
-
 using _calc = MathService.Calculators.Calculator;
 
 namespace EulerService.Implementations
 {
-    public partial class EulerService : IEulerService
+    public static class EulerProblem500
     {
         //https://projecteuler.net/problem=500
         //Problem 500!!!
@@ -51,8 +49,9 @@ namespace EulerService.Implementations
 
         private static List<int> _primes { get; set; }
 
-        public object RunProblem500(int maxFactors)
+        public static object RunProblem(double x, double y = 0, double z = 0)
         {
+            var maxFactors = (int)x;
             //var level_500500 = ReadTextFile();
             _primes = new List<int>(_calc.GetFirstNPrimes(600000));
 
@@ -73,7 +72,7 @@ namespace EulerService.Implementations
             return BigInteger.Remainder(GetNumberFromExpansion(level, _mod), _mod).ToString();
         }
 
-        private int GetLevelFactorCount(List<int> level)
+        private static int GetLevelFactorCount(List<int> level)
         {
             var factorCount = 0;
             for (var i = 0; i < level.Count; i++)
@@ -81,7 +80,7 @@ namespace EulerService.Implementations
             return factorCount;
         }
 
-        private BigInteger FindNumberOfDivisors(BigInteger num)
+        private static BigInteger FindNumberOfDivisors(BigInteger num)
         {
             var n = BigInteger.Zero;
 
@@ -89,7 +88,7 @@ namespace EulerService.Implementations
             return n;
         }
 
-        private BigInteger GetNumberFromPrimeFactorization(List<int> powers)
+        private static BigInteger GetNumberFromPrimeFactorization(List<int> powers)
         {
             var num = BigInteger.One;
 
@@ -101,7 +100,7 @@ namespace EulerService.Implementations
             return num;
         }
 
-        private BigInteger GetNumberFromExpansion(List<int> levels)
+        private static BigInteger GetNumberFromExpansion(List<int> levels)
         {
             var num = BigInteger.One;
             
@@ -112,7 +111,7 @@ namespace EulerService.Implementations
             return num;
         }
 
-        private BigInteger GetNumberFromExpansion(List<int> levels, BigInteger mod)
+        private static BigInteger GetNumberFromExpansion(List<int> levels, BigInteger mod)
         {
             var num = BigInteger.One;
             
@@ -123,7 +122,7 @@ namespace EulerService.Implementations
             return num;
         }
 
-        private List<int> GetNextLevel(List<int> currLevel)
+        private static List<int> GetNextLevel(List<int> currLevel)
         {
             // level increase is prime^(2^current level value)
             var nextLevel = new List<int>(currLevel);
@@ -161,7 +160,7 @@ namespace EulerService.Implementations
             return nextLevel;
         }
 
-        private void expProgression()
+        private static void expProgression()
         {
             var str = "new List<ulong>(){ \"1\", \"2\" ";
             var num = new BigInteger(2);
@@ -215,7 +214,7 @@ namespace EulerService.Implementations
             return result;
         }
 
-        private void Print(List<int> list)
+        private static void Print(List<int> list)
         {
             var str = $"{{{list[0]}";
 
@@ -228,7 +227,7 @@ namespace EulerService.Implementations
             Debug.WriteLine(str);
         }
 
-        private List<int> ReadTextFile()
+        private static List<int> ReadTextFile()
         {
             var intList = new List<int>(
             File.ReadLines("../MathService/Repositories/Constants/euler_500_answer.txt")

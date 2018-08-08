@@ -6,15 +6,13 @@ using System.Numerics;
 using System.Diagnostics;
 using System.Collections.Concurrent;
 
-using EulerService.Contracts;
-
 using _calc = MathService.Calculators.Calculator;
 
 namespace EulerService.Implementations
 {
-    public partial class EulerService: IEulerService
+    public static class EulerProblem590
     {
-        
+
 
         //Problem 590 --- https://projecteuler.net/problem=590
         //Let H(n) denote the number of sets of positive integers such that the 
@@ -31,8 +29,9 @@ namespace EulerService.Implementations
         //You are given HL(4)=H(12)=44.
 
         //Find HL(50000). Give your answer modulo 109.
-        public BigInteger RunProblem590(int num)
+        public static object RunProblem(double x, double y = 0, double z = 0)
         {
+            var num = (int)x;
             //var lcm50000 = BigInteger.Parse(_calc._e590_lcm50000);
             //var lcm50000_primeFactorization = _calc._e590_lcm50000_primeFactorization;
 
@@ -52,7 +51,7 @@ namespace EulerService.Implementations
         // number of sets who have lcm(set) = num ---- cardnality of subset of {1, 2, ..., n}
         // subset of set of divisors of n------
         //private BigInteger 
-        private BigInteger H_brute(int num)
+        private static BigInteger H_brute(int num)
         {
             BigInteger counter = 0;
             var divs = FindAllDivisors(num).OrderBy(n => n).ToList();
@@ -78,7 +77,7 @@ namespace EulerService.Implementations
             return counter;
         }
 
-        private BigInteger H_noMax(int num)
+        private static BigInteger H_noMax(int num)
         {
             BigInteger counter = 0;
             var divs = FindAllDivisors(num).Where(d => d != 1 && d != num).OrderBy(d => d).ToList();
@@ -104,7 +103,7 @@ namespace EulerService.Implementations
             return counter;
         }
 
-        private BigInteger H_hasMax_brute(int num)
+        private static BigInteger H_hasMax_brute(int num)
         {
             BigInteger counter = 0;
             var divs = FindAllDivisors(num).Where(d => d != 1).OrderBy(d => d).ToList();
@@ -131,7 +130,7 @@ namespace EulerService.Implementations
         }
 
         // num sets with max = 2*Sum(nCi) where i = 1 to max and n = num proper divisors of max
-        private BigInteger H_hasMax(BigInteger num)
+        private static BigInteger H_hasMax(BigInteger num)
         {
             BigInteger counter = 0;
             var divs = FindAllDivisors(num).Where(d => d != 1 && d != num);
@@ -145,7 +144,7 @@ namespace EulerService.Implementations
         }
 
         // returns lcm of {1, 2, 3, ..., max}
-        private BigInteger L(int max)
+        private static BigInteger L(int max)
         {
             var list = new List<long>(max);
             for (long i = 1; i <= max; i++)
@@ -153,8 +152,8 @@ namespace EulerService.Implementations
 
             return _calc.lcm(list);
         }
-        
-        private List<BigInteger> FindAllDivisors(BigInteger num)
+
+        private static List<BigInteger> FindAllDivisors(BigInteger num)
         {
             BigInteger counter = 0;
             var divisors = new List<BigInteger>() { 1 };            
@@ -179,12 +178,12 @@ namespace EulerService.Implementations
             return divisors;
         }
 
-        private BigInteger NumDivisors(BigInteger num)
+        private static BigInteger NumDivisors(BigInteger num)
         {
             return NumDivisors(GetPrimeFactorization(num));
         }
 
-        private BigInteger NumDivisors(int[] powers)
+        private static BigInteger NumDivisors(int[] powers)
         {
             BigInteger result = 1;
             for (int i = 0; i < powers.Length; i++)
@@ -192,7 +191,7 @@ namespace EulerService.Implementations
             return result;
         }
 
-        private int[] GetPrimeFactorization(BigInteger num)
+        private static int[] GetPrimeFactorization(BigInteger num)
         {
             var primes = _calc.GetAllPrimes(50000).ToArray();
             var powers = new int[primes.Length];
@@ -201,7 +200,7 @@ namespace EulerService.Implementations
             return powers;
         }
 
-        private BigInteger NumSubsetsWithLCMnum_IncludesNum(BigInteger num)
+        private static BigInteger NumSubsetsWithLCMnum_IncludesNum(BigInteger num)
         {
             var powers = GetPrimeFactorization(num);
             var divs = NumDivisors(powers);
@@ -215,7 +214,7 @@ namespace EulerService.Implementations
             return sum * 2;
         }
 
-        private List<List<BigInteger>> GetAllSubsets(int n)
+        private static List<List<BigInteger>> GetAllSubsets(int n)
         {
             var subsets = new List<List<BigInteger>>();
             for (int r = 1; r <= n; r++)
@@ -224,7 +223,7 @@ namespace EulerService.Implementations
             return subsets;
         }
 
-        public int GetCombID(List<int> comb, int max)
+        public static int GetCombID(List<int> comb, int max)
         {
             BigInteger id = _calc.nCr(max + 1, comb.Count);
             for (int i = 0; i < comb.Count; i++)
@@ -232,7 +231,7 @@ namespace EulerService.Implementations
             return (int)id;
         }
 
-        public List<BigInteger> GetCombFromID(int id, int combLength, int max)
+        public static List<BigInteger> GetCombFromID(int id, int combLength, int max)
         {
             List<BigInteger> comb = new List<BigInteger>(combLength);
             var tId = _calc.nCr(max, combLength) - (UInt64)id;
@@ -259,7 +258,7 @@ namespace EulerService.Implementations
             return comb;
         }
 
-        private void PrintSomething()
+        private static void PrintSomething()
         {
             //for (int i = 0; i < 2000; i++)
             //    if (BigInteger.Compare(_calc.Factorial(i), _calc.ShortFactorial(i, 1)) != 0)
@@ -293,7 +292,7 @@ namespace EulerService.Implementations
             //}
         }
 
-        private void PrintArray(List<BigInteger> arr)
+        private static void PrintArray(List<BigInteger> arr)
         {
             var str = "";
             for(int i = 0; i < arr.Count() - 1; i++)
@@ -302,7 +301,7 @@ namespace EulerService.Implementations
             Debug.WriteLine(str);
         }
 
-        private void PrintArray(List<int> arr)
+        private static void PrintArray(List<int> arr)
         {
             var str = "";
             for (int i = 0; i < arr.Count() - 1; i++)

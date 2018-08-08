@@ -4,13 +4,12 @@ using System.Numerics;
 using System.Text;
 using System.Linq;
 
-using EulerService.Contracts;
 
 using _calc = MathService.Calculators.Calculator;
 
 namespace EulerService.Implementations
 {
-    public partial class EulerService : IEulerService
+    public static class EulerProblem574
     {
         //Problem 574 --- https://projecteuler.net/problem=574
         //Published on Sunday, 16th October 2016, 10:00 am; Solved by 191; Difficulty rating: 50%
@@ -38,7 +37,7 @@ namespace EulerService.Implementations
         //S(10)=10 and S(200)=7177.
         //
         //Find S(3800).
-        public object RunProblem574(int x)
+        public static object RunProblem(double x, double y = 0, double z = 0)
         {
             long result = 0;
 

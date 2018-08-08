@@ -4,13 +4,11 @@ using System.Linq;
 using System.Collections.Concurrent;
 using System.Threading.Tasks;
 
-using EulerService.Contracts;
-
 using _calc = MathService.Calculators.Calculator;
 
 namespace EulerService.Implementations
 {
-    public partial class EulerService : IEulerService    
+    public static class EulerProblem569
     {
         //https://projecteuler.net/problem=569 ---------------completed
         //Published on Sunday, 11th September 2016, 06:00 am; Solved by 282;
@@ -40,8 +38,11 @@ namespace EulerService.Implementations
         //    
         // 4.                                   
 
-        public object RunProblem569(int num)
+
+        private static List<int> _primes { get; set; }
+        public static object RunProblem(double x, double y = 0, double z = 0)
         {
+            var num = (int)x;
             // make primes 1-based
             if ((_primes?.Count() ?? 0) < num)
             {
@@ -73,7 +74,7 @@ namespace EulerService.Implementations
             return count;
         }
 
-        private int FindLeftMostVisiblePeak(List<Peak> peaks, int rightPeak)
+        private static int FindLeftMostVisiblePeak(List<Peak> peaks, int rightPeak)
         {
             var leftPeak = 1;
             var minSlope = CalcSlope(peaks[rightPeak], peaks[leftPeak]);
@@ -90,7 +91,7 @@ namespace EulerService.Implementations
             return leftPeak;
         }
 
-        private long CountVisiblePeaks(List<Peak> peaks, int rightPeak)
+        private static long CountVisiblePeaks(List<Peak> peaks, int rightPeak)
         {
             var count = (long)1;
             if (peaks[rightPeak].IsTwin)
@@ -117,7 +118,7 @@ namespace EulerService.Implementations
             return count;
         }
 
-        private double CalcSlope(Peak p1, Peak p2)
+        private static double CalcSlope(Peak p1, Peak p2)
         {
             return (double)(p1.y - p2.y) / (p1.x - p2.x);
         }

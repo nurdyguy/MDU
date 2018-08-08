@@ -5,13 +5,11 @@ using System.Text;
 using System.Linq;
 using System.Diagnostics;
 
-using EulerService.Contracts;
-
 using _calc = MathService.Calculators.Calculator;
 
 namespace EulerService.Implementations
 {
-    public partial class EulerService : IEulerService    
+    public static class EulerProblem401  
     {
         //https://projecteuler.net/problem=401 difficulty: 25% ---------------completed
         //
@@ -35,8 +33,9 @@ namespace EulerService.Implementations
         // 3.  Add quotient*num^2
         // 
 
-        public object RunProblem401(int exp)
+        public static object RunProblem(double x, double y = 0, double z = 0)
         {
+            var exp = (int)x;
             var mod = BigInteger.Pow(10, 9);
             var result = LoopForward(exp);
 
@@ -45,7 +44,7 @@ namespace EulerService.Implementations
             return BigInteger.Remainder(result + tail, mod);
         }
 
-        private BigInteger LoopForward(int exp)
+        private static BigInteger LoopForward(int exp)
         {
             var max = (long)Math.Pow(10, exp);
             var result = new BigInteger(max);
@@ -90,8 +89,8 @@ namespace EulerService.Implementations
 
             return result;
         }
-        
-        private BigInteger CalcTail(int exp)
+
+        private static BigInteger CalcTail(int exp)
         {
             var max = (long)Math.Pow(10, exp);
             // gets all ends
@@ -99,7 +98,7 @@ namespace EulerService.Implementations
         }
 
         // from start + 1 to end
-        private BigInteger SumOfSquares(long start, long end)
+        private static BigInteger SumOfSquares(long start, long end)
         {
             // from 1 to end
             var result = (2 * end + 1) * new BigInteger(end + 1) * end;

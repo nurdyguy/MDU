@@ -81,7 +81,8 @@ namespace MathService.Repositories.Constants
         public static List<int> GetAllPrimes(int max)
         {
             var primes = new List<int>(max) { 2 };
-            for (var i = 0; i < max; i++)
+            var end = (max - 1)/2;
+            for (var i = 0; i <= end; i++)
                 if (_primes[0][i])
                     primes.Add(2*i + 1);
             return primes;

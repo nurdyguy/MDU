@@ -5,13 +5,11 @@ using System.Text;
 using System.Linq;
 using System.Diagnostics;
 
-using EulerService.Contracts;
-
 using _calc = MathService.Calculators.Calculator;
 
 namespace EulerService.Implementations
 {
-    public partial class EulerService : IEulerService    
+    public static class EulerProblem207   
     {
         //https://projecteuler.net/problem=207 difficulty: 40% ---------------completed
         //
@@ -45,9 +43,14 @@ namespace EulerService.Implementations
         // 3.  k = (2^t)^2 - 2^t
         // 4.  close to 50000000000
 
-        public object RunProblem207(long goalDenom)
+        private static List<ulong> _twoPowers = new List<ulong>(){ 1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 16384, 32768, 65536, 131072, 262144, 524288, 1048576, 2097152, 4194304, 8388608, 16777216, 33554432, 67108864,
+            134217728, 268435456, 536870912, 1073741824, 2147483648, 4294967296, 8589934592, 17179869184, 34359738368, 68719476736, 137438953472, 274877906944, 549755813888, 1099511627776, 2199023255552, 4398046511104, 8796093022208, 17592186044416, 35184372088832,
+            70368744177664, 140737488355328, 281474976710656, 562949953421312, 1125899906842624, 2251799813685248, 4503599627370496, 9007199254740992, 18014398509481984, 36028797018963968, 72057594037927936, 144115188075855872, 288230376151711744, 576460752303423488,
+            1152921504606846976, 2305843009213693952, 4611686018427387904, 9223372036854775808 };
+
+        public static object RunProblem(double x, double y = 0, double z = 0)
         {
-            var stop = 1 / (double)goalDenom;
+            var stop = 1 / x;
             long min = 10;
             long max = 50000000000;
             var result = new PartitionResult();
@@ -64,7 +67,7 @@ namespace EulerService.Implementations
             return new { result, max };
         }
         
-        private PartitionResult CalcP(long max)
+        private static PartitionResult CalcP(long max)
         {
             var perfCounter = 0;
             long k = 2;

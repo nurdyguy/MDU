@@ -4,14 +4,13 @@ using System.Numerics;
 using System.Text;
 using System.Linq;
 using EulerService.Models;
-using EulerService.Contracts;
 
 using _calc = MathService.Calculators.Calculator;
 
 
 namespace EulerService.Implementations
 {
-    public partial class EulerService : IEulerService    
+    public static class EulerProblem566
     {
         //Problem 566 --- https://projecteuler.net/problem=566
         //Adam plays the following game with his birthday cake.
@@ -41,9 +40,9 @@ namespace EulerService.Implementations
         //You are also given G(11) = 60, G(14) = 58020 and G(17) = 1269260.
 
         //Find G(53).
-        public BigInteger RunProblem566(int x, int y, int z)
+        public static object RunProblem(double x, double y = 0, double z = 0)
         {
-            var sim = new Problem566(x, y, z);
+            var sim = new Problem566((int)x, (int)y, (int)z);
             do
             {
                 sim.MakeNextCut();

@@ -4,13 +4,11 @@ using System.Numerics;
 using System.Text;
 using System.Linq;
 
-using EulerService.Contracts;
-
 using _calc = MathService.Calculators.Calculator;
 
 namespace EulerService.Implementations
 {
-    public partial class EulerService : IEulerService    
+    public static class EulerProblem482
     {
         //https://projecteuler.net/problem=482
         //https://en.wikipedia.org/wiki/Incenter
@@ -44,7 +42,7 @@ namespace EulerService.Implementations
         //p	is perimeter of the triangle (a+b+c)
 
 
-        public BigInteger RunProblem482(int P)
+        public static object RunProblem(double x, double y = 0, double z = 0)
         {
             
             return BigInteger.One;

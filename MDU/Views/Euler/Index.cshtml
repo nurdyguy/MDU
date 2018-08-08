@@ -4,6 +4,124 @@
 }
 
 
-<div class="row">
-    @Model
+<div class="row col-lg-12">
+    <h1>Project Euler Calculator</h1>
+    <div class="form-group row col-lg-12">
+        <div class="col-lg-12">
+            <label class="form-control-label" for="probNum">Problem Number:</label> 
+            <input id="probNum" class="intInput" type="number" min="0" step="1" max="999"/>
+        </div>
+        <h2>Input Values</h2>
+        <div class="row col-lg-12">            
+            <div class="form-group col-lg-4">
+                <label class="form-control-label" for="value1">Value 1</label>
+                <input type="number" step="any" value="" class="form-control floatInput" id="val1">
+            </div>
+            <div class="form-group col-lg-4">
+                <label class="form-control-label" for="value2">Value 2</label>
+                <input type="number" step="any" value="" class="form-control floatInput" id="val2">
+            </div>
+            <div class="form-group col-lg-4">
+                <label class="form-control-label" for="value3">Value 3</label>
+                <input type="number" step="any" value="" class="form-control floatInput" id="val3">
+            </div>
+        </div>
+        <button id="submit" class="btn btn-success col-lg-offset-1">Calculate!</button>
+    </div>
+    <div class="row col-lg-12">
+        <div class="col-lg-8">
+            <h2>Results</h2>
+            <div id="resultValue"></div>
+        </div>
+        <div class="col-lg-4">
+            <h2>Timers</h2>
+            <div id="timers"></div>
+        </div>
+    </div>
+
 </div>
+
+<script>
+    $(document).ready(function ()
+    {
+        $('#submit').on('click', function ()
+        {
+            var probNum = parseInt($('#probNum').val());
+            var x = parseFloat($('#val1').val());
+            var y = parseFloat($('#val2').val());
+            var z = parseFloat($('#val3').val());
+
+            var url = '/Euler/';
+            if (isNaN(probNum))
+                return;
+            else
+                url += probNum;
+
+            if (!isNaN(x))
+            {
+                url += '/' + x;
+                if (!isNaN(y))
+                {
+                    url += '/' + y;
+                    if (!isNaN(z))
+                        url += '/' + z;
+                }
+            }
+            else
+                return;
+
+            $.ajax(
+            {
+                url: url,
+                type: 'GET'
+            }).done(function (data) 
+            {
+                $('#resultValue').append('---------------------------------');
+
+                $('#resultValue').append(ParseJsonToHtml(data.result));
+                $('#timers').append(ParseJsonToHtml(data.timers));
+                
+            });
+
+
+
+
+
+                
+        });
+
+        $('.intInput').on('focusout', function ()
+        {
+            var $this = $(this);
+            if (parseInt(isNaN($(this).val())))
+                $this.removeClass('is-valid').addClass('is-invalid');
+            else
+                $this.removeClass('is-invalid').addClass('is-valid');
+        });
+
+        $('.floatInput').on('focusout', function ()
+        {
+            var $this = $(this);
+            if (isNaN(parseFloat($(this).val())))
+                $this.removeClass('is-valid').addClass('is-invalid');
+            else
+                $this.removeClass('is-invalid').addClass('is-valid');
+        });
+    });
+
+    function ParseJsonToHtml(obj)
+    {
+        var html = '<div class="row offset-lg-1 col-lg-11">';
+        for (var i in obj)
+        {
+            html += '<div class="col-lg-5">' + i + ': </div>';
+            if (typeof obj[i] == "object")
+                html += ParseJsonToHtml(obj[i]);
+            else
+                html += '<div class="col-lg-5">' + obj[i] + '</div> ';
+        }
+        html += '</div>';
+        return html;
+    }
+
+</script>

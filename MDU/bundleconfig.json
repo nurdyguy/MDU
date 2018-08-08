@@ -23,7 +23,8 @@
       "wwwroot/scss/site.css",
       "wwwroot/scss/mdu.css",
       "wwwroot/scss/raffle.css",
-      "wwwroot/scss/appraisal.css"
+      "wwwroot/scss/appraisal.css",
+      "wwwroot/scss/cars.css"
     ]
   }
 ]

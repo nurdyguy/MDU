@@ -7,13 +7,11 @@ using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Linq;
 
-using EulerService.Contracts;
-
 using _calc = MathService.Calculators.Calculator;
 
 namespace EulerService.Implementations
 {
-    public partial class EulerService : IEulerService    
+    public static class EulerProblem483
     {
         //Problem 483 --- https://projecteuler.net/problem=483
         //We define a permutation as an operation that rearranges the order of the elements {1, 2, 3, ..., n}.
@@ -59,16 +57,17 @@ namespace EulerService.Implementations
         // 2.  For each of these, find each linear combination of the integers where total <= n ---- in ex above 5*1 + 3*2 + 2*2 <= 50
         // 3.  How many of these combinations are there?  Total combx * LCM^2
         // 4.  Sum it up and divide by n!
-               
-        
-        public object RunProblem483(int max)
+
+
+        public static object RunProblem(double x, double y = 0, double z = 0)
         {
+            var max = (int)x;
             var result = FindSumComboRecursive(max);
             return result;
             
         }
 
-        private BigInteger FindSumComboRecursive(int max)
+        private static BigInteger FindSumComboRecursive(int max)
         {
             var startLevel = 4;
             
@@ -149,7 +148,7 @@ namespace EulerService.Implementations
             return combCounter;
         }
 
-        private BigInteger FindSumCombo(int max)
+        private static BigInteger FindSumCombo(int max)
         {
             BigInteger counter = 2;
 
@@ -163,15 +162,15 @@ namespace EulerService.Implementations
             return counter;
         }
 
-        private int GetNextNumber(int total, int testNum)
+        private static int GetNextNumber(int total, int testNum)
         {
             return 0;
         }
 
 
-        private CombinationLevel[] Combinations = new CombinationLevel[350];
+        private static CombinationLevel[] Combinations = new CombinationLevel[350];
 
-        private CombinationLevel GetNextLevel(CombinationLevel prevLevel, CombinationLevel prevLevel2)
+        private static CombinationLevel GetNextLevel(CombinationLevel prevLevel, CombinationLevel prevLevel2)
         {
             var additions = new ConcurrentBag<SumCombination>();
             var newLevel = prevLevel.Level + 1;
@@ -204,7 +203,7 @@ namespace EulerService.Implementations
             return newCombLevel;
         }
 
-        private List<int[]> GetNextLevel(List<int[]> prevLevel, List<int[]> prevLevel2, int nextlevel)
+        private static List<int[]> GetNextLevel(List<int[]> prevLevel, List<int[]> prevLevel2, int nextlevel)
         {
             //var additions = new ConcurrentBag<int[]>();
 
@@ -300,7 +299,7 @@ namespace EulerService.Implementations
 
             public List<int> Numbers { get; set; }
 
-            public List<int> Multiples { get; set; }
+            public static List<int> Multiples { get; set; }
 
             public SumCombination(int max)
             {
@@ -325,12 +324,12 @@ namespace EulerService.Implementations
                 }                
             }
 
-            
+
             public void Print()
             {
                 Debug.WriteLine(this.ToString());
-            }        
-            
+            }
+
             public override string ToString()
             {
                 var str = $"{{{Numbers[0]}";

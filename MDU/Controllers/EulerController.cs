@@ -6,21 +6,37 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-using EulerService.Contracts;
-
+using _euler8 = EulerService.Implementations.EulerProblem8;
+using _euler9 = EulerService.Implementations.EulerProblem9;
+using _euler10 = EulerService.Implementations.EulerProblem10;
+using _euler11 = EulerService.Implementations.EulerProblem11;
+using _euler12 = EulerService.Implementations.EulerProblem12;
+using _euler13 = EulerService.Implementations.EulerProblem13;
+using _euler53 = EulerService.Implementations.EulerProblem53;
+using _euler207 = EulerService.Implementations.EulerProblem207;
+using _euler357 = EulerService.Implementations.EulerProblem357;
+using _euler401 = EulerService.Implementations.EulerProblem401;
+using _euler432 = EulerService.Implementations.EulerProblem432;
+using _euler458 = EulerService.Implementations.EulerProblem458;
+using _euler461 = EulerService.Implementations.EulerProblem461;
+using _euler467 = EulerService.Implementations.EulerProblem467;
+using _euler482 = EulerService.Implementations.EulerProblem482;
+using _euler483 = EulerService.Implementations.EulerProblem483;
+using _euler500 = EulerService.Implementations.EulerProblem500;
+using _euler501 = EulerService.Implementations.EulerProblem501;
+using _euler504 = EulerService.Implementations.EulerProblem504;
+using _euler566 = EulerService.Implementations.EulerProblem566;
+using _euler569 = EulerService.Implementations.EulerProblem569;
+using _euler574 = EulerService.Implementations.EulerProblem574;
+using _euler576 = EulerService.Implementations.EulerProblem576;
+using _euler590 = EulerService.Implementations.EulerProblem590;
 
 namespace MDU.Controllers
 {
     [Authorize("Admin")]
     public class EulerController : Controller
     {
-        private readonly IEulerService _eulerService;
-
-        public EulerController(IEulerService eulerService)
-        {
-            _eulerService = eulerService;
-        }
-
+        
         public async Task<IActionResult> Index()
         {
 
@@ -29,10 +45,10 @@ namespace MDU.Controllers
         }
 
         [HttpGet,
-        Route("Euler/{problemNumber:int}/{x:long}"),
-        Route("Euler/{problemNumber:int}/{x:long}/{y:int}"),
-        Route("Euler/{problemNumber:int}/{x:long}/{y:int}/{z:int}")]
-        public async Task<IActionResult> Problem(int problemNumber, long x = 1, int y = 1, int z = 1)
+        Route("Euler/{problemNumber:int}/{x:double}"),
+        Route("Euler/{problemNumber:int}/{x:double}/{y:double}"),
+        Route("Euler/{problemNumber:int}/{x:double}/{y:double}/{z:double}")]
+        public async Task<IActionResult> Problem(int problemNumber, double x = 1, double y = 1, double z = 1)
         {
             
             var watch = new Stopwatch();
@@ -42,44 +58,77 @@ namespace MDU.Controllers
             object result;
             switch (problemNumber)
             {
+                case 8:// completed
+                    result = _euler8.RunProblem(x, y, z);
+                    break;
+                case 9:// completed
+                    result = _euler9.RunProblem(x, y, z);
+                    break;
+                case 10:// completed
+                    result = _euler10.RunProblem(x, y, z);
+                    break;
+                case 11:// completed
+                    result = _euler11.RunProblem(x, y, z);
+                    break;
+                case 12:// completed
+                    result = _euler12.RunProblem(x, y, z);
+                    break;
+                case 13:// completed
+                    result = _euler13.RunProblem(x, y, z);
+                    break;
+                case 53:// completed
+                    result = _euler53.RunProblem(x, y, z);
+                    break;
                 case 207:// completed
-                    result = _eulerService.RunProblem207(x);
+                    result = _euler207.RunProblem(x, y, z);
+                    break;
+                case 357: 
+                    result = _euler357.RunProblem(x, y, z);
                     break;
                 case 401:// completed
-                    result = _eulerService.RunProblem401((int)x);
+                    result = _euler401.RunProblem(x, y, z);
+                    break;
+                case 432:
+                    result = _euler432.RunProblem(x, y, z);
+                    break;
+                case 458:
+                    result = _euler458.RunProblem(x, y, z);
                     break;
                 case 461:// completed
-                    result = _eulerService.RunProblem461((int)x);
+                    result = _euler461.RunProblem(x, y, z);
                     break;
                 case 467:
-                    result = _eulerService.RunProblem467((int)x);
+                    result = _euler467.RunProblem(x, y, z);
                     break;
                 case 482:
-                    result = _eulerService.RunProblem482((int)x);
+                    result = _euler482.RunProblem(x, y, z);
                     break;
                 case 483:
-                    result = _eulerService.RunProblem483((int)x);
+                    result = _euler483.RunProblem(x, y, z);
                     break;
                 case 500:// completed
-                    result = _eulerService.RunProblem500((int)x);
+                    result = _euler500.RunProblem(x, y, z);
                     break;
                 case 501:
-                    result = _eulerService.RunProblem501((int)x);
+                    result = _euler501.RunProblem(x, y, z);
                     break;
                 case 504:// completed
-                    result = _eulerService.RunProblem504((int)x);
+                    result = _euler504.RunProblem(x, y, z);
                     break;
                 case 566:
-                    result = _eulerService.RunProblem566((int)x, y, z);
+                    result = _euler566.RunProblem(x, y, z);
                     break;
                 case 569:// completed
-                    result = _eulerService.RunProblem569((int)x);
+                    result = _euler569.RunProblem(x, y, z);
                     break;
                 case 574:
-                    result = _eulerService.RunProblem574((int)x);
+                    result = _euler574.RunProblem(x, y, z);
+                    break;
+                case 576:
+                    result = _euler576.RunProblem(x, y, z);
                     break;
                 case 590:
-                    result = _eulerService.RunProblem590((int)x);
+                    result = _euler590.RunProblem(x, y, z);
                     break;
                 default:
                     throw new NotImplementedException();
@@ -88,7 +137,7 @@ namespace MDU.Controllers
 
             timers.Add(watch.ElapsedMilliseconds / 1000.0);
             watch.Stop();
-            return View("~/Views/Euler/Problem.cshtml", Json(new { timers, Result = result }));
+            return Json(new { timers, result });
         }
 
     }

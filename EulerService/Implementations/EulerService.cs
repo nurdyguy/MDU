@@ -2,19 +2,21 @@
 using System.Collections.Generic;
 using System.Text;
 
-using EulerService.Contracts;
-
 using _calc = MathService.Calculators.Calculator;
 
 namespace EulerService.Implementations
 {
-    public partial class EulerService : IEulerService
-    {
+    //public class EulerService : IEulerService
+    //{
         
-        public EulerService()
-        {
+    //    public EulerService()
+    //    {
             
-            //Calculator.InitCalculator();  //------------------------------------------------
-        }
-    }
+
+    //    }
+    //    public object RunProblem(long x, long y = 0, long z = 0)
+    //    {
+    //        return new { };
+    //    }
+    //}
 }

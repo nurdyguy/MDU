@@ -18,5 +18,9 @@
   {
     "outputFile": "wwwroot/scss/appraisal.css",
     "inputFile": "wwwroot/scss/appraisal.scss"
+  },
+  {
+    "outputFile": "wwwroot/scss/cars.css",
+    "inputFile": "wwwroot/scss/cars.scss"
   }
 ]

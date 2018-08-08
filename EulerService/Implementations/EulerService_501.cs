@@ -4,13 +4,12 @@ using System.Numerics;
 using System.Text;
 using System.Linq;
 
-using EulerService.Contracts;
 
 using _calc = MathService.Calculators.Calculator;
 
 namespace EulerService.Implementations
 {
-    public partial class EulerService : IEulerService    
+    public static class EulerProblem501
     {
         //https://projecteuler.net/problem=501
 
@@ -28,8 +27,9 @@ namespace EulerService.Implementations
         // 2.  Get total with p^3*q                                     => p < cube root of 10^exp times q < 10^exp/p^3 excluding p itself ---- still pretty easy
         // 3.  Get total with p*q*r                                     =>   ---- more complicated
 
-        public object RunProblem501(int exp)
+        public static object RunProblem(double x, double y = 0, double z = 0)
         {
+            var exp = (int)x;
             var total = (ulong)0;
 
             var singles =  GetSinglePrimeFactorCount(exp);
@@ -38,15 +38,15 @@ namespace EulerService.Implementations
 
             return new { singles, doubles, triples };
         }
-        
-        private ulong GetSinglePrimeFactorCount(int exp)
+
+        private static ulong GetSinglePrimeFactorCount(int exp)
         {
             var maxPrime = Math.Pow(Math.Pow(10, exp), 1.0/7.0);
             return _calc.GetPrimeCount((long)maxPrime);
         }
 
         //p^3 * q
-        private ulong GetTwoPrimeFactorsCount(int exp)
+        private static ulong GetTwoPrimeFactorsCount(int exp)
         {
             var count = (ulong)0;
             var max = Math.Pow(10, exp);
@@ -65,7 +65,7 @@ namespace EulerService.Implementations
             return count;
         }
 
-        private ulong GetThreePrimeFactorsCount(int exp)
+        private static ulong GetThreePrimeFactorsCount(int exp)
         {
             var count = (ulong)0;
             

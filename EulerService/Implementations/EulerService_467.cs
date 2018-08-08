@@ -6,13 +6,11 @@ using System.Linq;
 using System.Collections;
 using System.Collections.Concurrent;
 
-using EulerService.Contracts;
-
 using _calc = MathService.Calculators.Calculator;
 
 namespace EulerService.Implementations
 {
-    public partial class EulerService : IEulerService
+    public static class EulerProblem467
     {
         //Problem 574 --- https://projecteuler.net/problem=467
         //Published on Sunday, 13th April 2014, 10:00 am; Solved by 323; Difficulty rating: 50%
@@ -48,10 +46,10 @@ namespace EulerService.Implementations
         // Notes:
         // 1.  Get P_n and C_n as arrays
         // 2.  Start with the one with more digits and build out the superInt
-        
-        public object RunProblem467(int num)
+
+        public static object RunProblem(double x, double y = 0, double z = 0)
         {
-            
+            var num = (int)x;
             var mod = 1000000007;
             var pN = new List<int>();
             var cN = new List<int>();
@@ -73,7 +71,7 @@ namespace EulerService.Implementations
             return new { Result = PrintableList(resultList), pN = PrintableList(pN), p, cN = PrintableList(cN), c, answer = bigResult };
         }
 
-        private List<int> BuildSuperInt(List<int> seq1, List<int> seq2)
+        private static List<int> BuildSuperInt(List<int> seq1, List<int> seq2)
         {
             var length = Math.Max(seq1.Count(), seq2.Count());
             var super = new List<int>(seq1.Count() + seq2.Count());
@@ -229,7 +227,7 @@ namespace EulerService.Implementations
             return super;
         }
 
-        private bool IsSuperInt(List<int> seq, List<int> super)
+        private static bool IsSuperInt(List<int> seq, List<int> super)
         {
             int next = 0;
             for(var i = 0; i < seq.Count(); i++)
@@ -241,7 +239,7 @@ namespace EulerService.Implementations
             return true;
         }
 
-        private void BuildDigitSequences(List<int> pDigs, List<int> cDigs, int size)
+        private static void BuildDigitSequences(List<int> pDigs, List<int> cDigs, int size)
         {
             var primes = _calc.GetFirstNPrimes(size);
             var comps = new List<int>(size);
@@ -259,7 +257,7 @@ namespace EulerService.Implementations
 
         }
 
-        private int SumDigits(int num)
+        private static int SumDigits(int num)
         {
             var result = 0;
             while(num > 0)
@@ -273,7 +271,7 @@ namespace EulerService.Implementations
             return result;
         }
 
-        private int FindNext(List<int> seq, int start, int value)
+        private static int FindNext(List<int> seq, int start, int value)
         {
             for (var i = start; i < seq.Count(); i++)
                 if (seq[i] == value)
@@ -281,14 +279,14 @@ namespace EulerService.Implementations
             return -1;
         }
 
-        private void CopySeguenceSegment(List<int> fromSeq, List<int> toSeq, int start, int end = int.MaxValue)
+        private static void CopySeguenceSegment(List<int> fromSeq, List<int> toSeq, int start, int end = int.MaxValue)
         {
             end = Math.Min(fromSeq.Count() - 1, end);
             for (var i = start; i <= end; i++)
                 toSeq.Add(fromSeq[i]);
         }
 
-        private long BuildResultNum(List<int> seq)
+        private static long BuildResultNum(List<int> seq)
         {
             long result = 0;
             for (var i = 0; i < seq.Count(); i++)
@@ -296,7 +294,7 @@ namespace EulerService.Implementations
             return result;
         }
 
-        private BigInteger BuildResultBigInt(List<int> seq, int mod)
+        private static BigInteger BuildResultBigInt(List<int> seq, int mod)
         {
             var result = BigInteger.Zero;
             for (var i = 0; i < seq.Count(); i++)
@@ -304,7 +302,7 @@ namespace EulerService.Implementations
             return BigInteger.Remainder(result, mod);
         }
 
-        private string PrintableList(List<int> seq)
+        private static string PrintableList(List<int> seq)
         {
             var str = $"{seq[0]}";
             for (var i = 1; i < seq.Count(); i++)
@@ -312,7 +310,7 @@ namespace EulerService.Implementations
             return str;
         }
 
-        private List<int> FindLongestCommonSubInteger(List<int> seq1, List<int> seq2)
+        private static List<int> FindLongestCommonSubInteger(List<int> seq1, List<int> seq2)
         {
             if (IsSuperInt(seq1, seq2))
                 return seq1;
@@ -338,7 +336,7 @@ namespace EulerService.Implementations
             return common;
         }
 
-        private List<int> SmallestMergeTwoLists(List<int> seq1, List<int> seq2)
+        private static List<int> SmallestMergeTwoLists(List<int> seq1, List<int> seq2)
         {
             var merge = new List<int>(seq1.Count() + seq2.Count());
 

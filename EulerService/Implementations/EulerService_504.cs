@@ -5,13 +5,11 @@ using System.Text;
 using System.Linq;
 using System.Diagnostics;
 
-using EulerService.Contracts;
-
 using _calc = MathService.Calculators.Calculator;
 
 namespace EulerService.Implementations
 {
-    public partial class EulerService : IEulerService    
+    public static class EulerProblem504
     {
         //https://projecteuler.net/problem=504 ---------------completed
         //
@@ -34,8 +32,9 @@ namespace EulerService.Implementations
         // 3. If you chop the rectangle [0,x]x[0,y] along the diagonal (in half) that is the 
         //    quadrant triangle so basically, (x-1)(y-1)/2 then exclude points ON diagonal
         // 4. Count up points in quadrants + points on axis
-        public object RunProblem504(int max)
+        public static object RunProblem(double x, double y = 0, double z = 0)
         {
+            var max = (int)x;
             long count = 0;
             var pts = new List<int>(4);
             for (var a = 1; a <= max; a++)
@@ -54,7 +53,7 @@ namespace EulerService.Implementations
             return count;
         }
 
-        private long GetLatticePoints(List<int> pts)
+        private static long GetLatticePoints(List<int> pts)
         {
             return PointsInTriangle(pts[0], pts[1])
                     + PointsInTriangle(pts[1], pts[2])
@@ -62,7 +61,7 @@ namespace EulerService.Implementations
                     + PointsInTriangle(pts[0], pts[3])
                     + PointsOnAxis(pts[0], pts[1], pts[2], pts[3]);
         }
-        private long GetLatticePoints(int a, int b, int c, int d)
+        private static long GetLatticePoints(int a, int b, int c, int d)
         {
             return PointsInTriangle(a, b)
                     + PointsInTriangle(b, c)
@@ -70,18 +69,18 @@ namespace EulerService.Implementations
                     + PointsInTriangle(a, d)
                     + PointsOnAxis(a, b, c, d);
         }
-        private long PointsInTriangle(int x, int y)
+        private static long PointsInTriangle(int x, int y)
         {
             long points = ((x - 1)*(y - 1) - gcf(x, y) + 1)/2;
             
             return points;
         }
-        private long PointsOnAxis(int a, int b, int c, int d)
+        private static long PointsOnAxis(int a, int b, int c, int d)
         {
             return a + b + c + d - 3;
         }
 
-        private long gcf(int x, int y)
+        private static long gcf(int x, int y)
         {
             while (x != 0 && y != 0)
             {
