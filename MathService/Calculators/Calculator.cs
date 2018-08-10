@@ -13,6 +13,8 @@ namespace MathService.Calculators
     public static partial class Calculator
     {
         private static bool _initialized = false;
+
+
         public static void InitializeCalculator()
         {
             if (!_initialized)

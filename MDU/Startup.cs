@@ -70,6 +70,7 @@ namespace MDU
             Action<MDU.MDUOptions> mduOptions = (opt =>
             {
                 opt.mduConnectionString = Configuration["ConnectionStrings:mduConnection"];
+                opt.mathServiceConstantsPath = Configuration["ConnectionStrings:mathServiceConstantsPath"];
             });
             services.Configure(mduOptions);
             services.AddSingleton(resolver => resolver.GetRequiredService<IOptions<MDUOptions>>().Value);
